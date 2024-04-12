@@ -3,22 +3,26 @@ import java.util.HashMap;
 
 public class Env
 {
+    private HashMap<String, Object> symbols;
     public Env prev;
     public Env(Env prev)
     {
+        this.prev = prev;
+        symbols = new HashMap<>();
     }
     public void Put(String name, Object value)
     {
+        symbols.put(name, value);
     }
     public Object Get(String name)
     {
-        // this is a fake implementation
-        // For the real implementation, I recommend to return a class object
-        //   since the identifier's type can be variable or function
-        //   whose detailed attributes will be different
-        if(name.equals("a") == true) return "num";
-        if(name.equals("b") == true) return "bool";
-        if(name.equals("testfunc") == true) return "num()";
-        return null;
+        Object value = symbols.get(name);
+        if (value != null) {
+            return value;
+        } else if (prev != null) {
+            return prev.Get(name);
+        } else {
+            return null;
+        }
     }
 }

@@ -5,48 +5,48 @@ identifier   = [a-zA-Z][a-zA-Z0-9_]*
 newline      = \n
 whitespace   = [ \t\r]+
 linecomment  = "//".*
-blockcomment = "(*"[^]*"*)"
+blockcomment = "{"[^]*"}"
 
-FUNC                "func"
-RETURN              "return"
-VAR                 "var"
-IF                  "if"
-THEN                "then"
-ELSE                "else"
-BEGIN               "begin"
-END                 "end"
-WHILE               "while"
-LPAREN              "("
-RPAREN              ")"
-LBRACKET            "["
-RBRACKET            "]"
-NEW                 "new"
-NUM                 "num"
-BOOL                "bool"
-PRINT               "print"
-DOT                 "."
-SIZE                "size"
-ASSIGN              ":="
-TYPEOF              "::"
-ADD                 "+"
-SUB                 "-"
-MUL                 "*"
-DIV                 "/"
-MOD                 "%"
-AND                 "and"
-OR                  "or"
-NOT                 "not"
-LT                  "<"
-GT                  ">"
-LE                  "<="
-GE                  ">="
-EQ                  "="
-NE                  "<>"
-SEMI                ";"
+FUNC                "func" -
+RETURN              "return" -
+VAR                 "var" -
+IF                  "if" -
+THEN                "then" -
+ELSE                "else" -
+BEGIN               "begin" -
+END                 "end" -
+WHILE               "while" -
+LPAREN              "(" -
+RPAREN              ")" -
+LBRACKET            "[" -
+RBRACKET            "]" -
+NEW                 "new" -
+NUM                 "num" -
+BOOL                "bool" -
+PRINT               "print" -
+DOT                 "." -
+SIZE                "size" -
+ASSIGN              ":=" -
+TYPEOF              "::" -
+ADD                 "+" -
+SUB                 "-" -
+MUL                 "*" -
+DIV                 "/" -
+MOD                 "%" -
+AND                 "and" -
+OR                  "or" -
+NOT                 "not" -
+LT                  "<" -
+GT                  ">" -
+LE                  "<=" -
+GE                  ">=" -
+EQ                  "=" -
+NE                  "<>" -
+SEMI                ";" -
 COMMA               ","
-BOOL_LIT            "true"|"false"
-NUM_LIT             {num}
-IDENT               {identifier}
+BOOL_LIT            "true"|"false" -
+NUM_LIT             {num} -
+IDENT               {identifier} -
 
 ======================================================================================================
 Parser Information:
