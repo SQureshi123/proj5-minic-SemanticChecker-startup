@@ -85,19 +85,19 @@ stmt            : assign_stmt                                   { Debug("stmt ->
 assign_stmt     : IDENT ASSIGN expr SEMI                        { Debug("assign_stmt -> IDENT := expr ;"        ); $$ = assignstmt____IDENT_ASSIGN_expr_SEMI($1,$2,$3,$4); }
                 ;
 
-print_stmt      : PRINT expr SEMI                               { $$ = print_stmt____PRINT_expr_SEMI($1, $2, $3); }
+print_stmt      : PRINT expr SEMI                               { Debug("print_stmt -> PRINT expr SEMI"); $$ = print_stmt____PRINT_expr_SEMI($1, $2, $3); }
                 ;
 
 return_stmt     : RETURN expr SEMI                              { Debug("return_stmt -> return expr ;"          ); $$ = returnstmt____RETURN_expr_SEMI($1,$2,$3); }
                 ;
 
-if_stmt         : IF expr THEN stmt_list ELSE stmt_list END     {  }
+if_stmt         : IF expr THEN stmt_list ELSE stmt_list END     { Debug("if_stmt -> IF expr THEN stmt_list ELSE stmt_list END"); $$ = if_stmt____IF_expr_THEN_stmt_list_ELSE_stmt_list_END($1,$2,$3,$4,$5); }
                 ;
 
-while_stmt      : WHILE expr BEGIN stmt_list END                {  }
+while_stmt      : WHILE expr BEGIN stmt_list END                { Debug("while_stmt -> WHILE expr BEGIN stmt_list END"); $$ = while_stmt____WHILE_expr_BEGIN_stmt_list_END($1,$2,$3,$4); }
                 ;
 
-compound_stmt   : BEGIN local_decls stmt_list END               {  }
+compound_stmt   : BEGIN local_decls stmt_list END               { Debug("compound_stmt -> BEGIN local_decls stmt_list END"); $$ = compound_stmt____BEGIN_local_decls_stmt_list_END($1,$2,$3,$4); }
                 ;
 
 local_decls     : local_decls  local_decl                       { Debug("local_decls -> local_decls local_decl" ); $$ = localdecls____localdecls_localdecl($1,$2); }
@@ -110,8 +110,8 @@ local_decl      : VAR  IDENT  TYPEOF  type_spec  SEMI           { Debug("local_d
 args            :                                               { Debug("args -> eps"                           ); $$ = args____eps(); }
                 ;
 
-arg_list        : arg_list COMMA expr                           {  }
-                | expr                                          {  }
+arg_list        : arg_list COMMA expr                           { Debug("arg_list -> arg_list COMMA expr");        $$ = arg_list____arg_list_COMMA_expr ($1, $2, $3); }
+                | expr                                          { Debug("arg_list -> expr");                       $$ = arg_list____expr($1); }
                 ;
 
 expr            : expr ADD expr                                 { Debug("expr -> expr ADD expr"                 ); $$ = expr____expr_ADD_expr           ($1,$2,$3   ); }

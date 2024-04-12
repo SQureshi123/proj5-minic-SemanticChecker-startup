@@ -182,6 +182,46 @@ public class ParserImpl
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+    Object if_stmt____IF_expr_THEN_stmt_list_ELSE_stmt_list_END(Object s1, Object s2, Object s3, Object s4, Object s5) {
+        ParseTree.Expr condition = (ParseTree.Expr) s2;
+        ArrayList<ParseTree.Stmt> thenStmtList = (ArrayList<ParseTree.Stmt>) s4;
+        ArrayList<ParseTree.Stmt> elseStmtList = (ArrayList<ParseTree.Stmt>) s5;
+        return new ParseTree.IfStmt(condition, thenStmtList, elseStmtList);
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    Object while_stmt____WHILE_expr_BEGIN_stmt_list_END(Object s1, Object s2, Object s3, Object s4) {
+        ParseTree.Expr expr = (ParseTree.Expr) s2;
+        ArrayList<ParseTree.Stmt> stmtList = (ArrayList<ParseTree.Stmt>) s4;
+        return new ParseTree.WhileStmt(expr, stmtList);
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    Object compound_stmt____BEGIN_local_decls_stmt_list_END(Object s1, Object s2, Object s3, Object s4) {
+        ArrayList<ParseTree.LocalDecl> localDecls = (ArrayList<ParseTree.LocalDecl>) s2;
+        ArrayList<ParseTree.Stmt> stmtList = (ArrayList<ParseTree.Stmt>) s3;
+        return new ParseTree.CompoundStmt(localDecls, stmtList);
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    Object arg_list____arg_list_COMMA_expr(Object s1, Object s2, Object s3) {
+        ArrayList<ParseTree.Expr> argList = (ArrayList<ParseTree.Expr>) s1;
+        ParseTree.Expr expr = (ParseTree.Expr) s3;
+        argList.add(expr);
+        return argList;
+    }
+
+    Object arg_list____expr(Object s1) {
+        ArrayList<ParseTree.Expr> argList = new ArrayList<>();
+        argList.add((ParseTree.Expr) s1);
+        return argList;
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     Object expr____expr_ADD_expr(Object s1, Object s2, Object s3) throws Exception
     {
         // 1. check if expr1.value_type matches with the expr2.value_type
