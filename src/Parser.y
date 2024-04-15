@@ -81,8 +81,11 @@ stmt_list       : stmt_list stmt                                { Debug("stmt_li
                 |                                               { Debug("stmt_list -> eps"                      ); $$ = stmtlist____eps          (     ); }
                 ;
 
-stmt            : assign_stmt                                   { Debug("stmt -> assign_stmt"                   ); $$ = stmt____assignstmt  ($1); }
-                | return_stmt                                   { Debug("stmt -> return_stmt"                   ); $$ = stmt____returnstmt  ($1); }
+stmt            : assign_stmt                                   { Debug("stmt -> assign_stmt"                   ); $$ = stmt____assignstmt      ($1); }
+                | return_stmt                                   { Debug("stmt -> return_stmt"                   ); $$ = stmt____returnstmt      ($1); }
+                | if_stmt                                       { Debug("stmt -> if_stmt"                       ); $$ = stmt____ifstmt          ($1); }
+                | while_stmt                                    { Debug("stmt -> while_stmt"                    ); $$ = stmt____whilestmt       ($1); }
+                | compound_stmt                                 { Debug("stmt -> compound_stmt"                 ); $$ = stmt____compoundstmt    ($1); }
                 ;
 
 assign_stmt     : IDENT ASSIGN expr SEMI                        { Debug("assign_stmt -> IDENT := expr ;"        ); $$ = assignstmt____IDENT_ASSIGN_expr_SEMI($1,$2,$3,$4); }

@@ -143,18 +143,33 @@ public class ParserImpl
         assert(s1 instanceof ParseTree.AssignStmt);
         return s1;
     }
-
+    Object stmt____returnstmt(Object s1) throws Exception
+    {
+        assert(s1 instanceof ParseTree.ReturnStmt);
+        return s1;
+    }
+    Object stmt____ifstmt(Object s1) throws Exception
+    {
+        assert(s1 instanceof ParseTree.IfStmt);
+        return s1;
+    }
+    Object stmt____whilestmt(Object s1) throws Exception
+    {
+        assert(s1 instanceof ParseTree.WhileStmt);
+        return s1;
+    }
+    Object stmt____compoundstmt(Object s1) throws Exception
+    {
+        assert(s1 instanceof ParseTree.CompoundStmt);
+        return s1;
+    }
     Object print_stmt____PRINT_expr_SEMI(Object s1, Object s2, Object s3) throws Exception
     {
         ParseTree.Expr expr = (ParseTree.Expr)s2;
         return new ParseTree.PrintStmt(expr);
     }
 
-    Object stmt____returnstmt  (Object s1) throws Exception
-    {
-        assert(s1 instanceof ParseTree.ReturnStmt);
-        return s1;
-    }
+
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
