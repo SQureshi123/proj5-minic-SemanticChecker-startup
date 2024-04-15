@@ -72,7 +72,15 @@ public class ParserImpl
         // 2. create a new symbol table on top of env
         // 3. add parameters into top-local scope of env
         // 4. etc.
+
+        Token functionNameToken = (Token) s2;                                               //NEEDS FINISHED
+        ParseTree.TypeSpec returnType = (ParseTree.TypeSpec) s4;
+        ArrayList<ParseTree.Param> params = (ArrayList<ParseTree.Param>) s6;
+        ArrayList<ParseTree.LocalDecl> localDecls = (ArrayList<ParseTree.LocalDecl>) s8;
+        ArrayList<ParseTree.Stmt> stmtList = (ArrayList<ParseTree.Stmt>) s9;
+
         return null;
+
     }
     Object fundecl____FUNC_IDENT_TYPEOF_typespec_LPAREN_params_RPAREN_BEGIN_localdecls_X10_stmtlist_END(Object s1, Object s2, Object s3, Object s4, Object s5, Object s6, Object s7, Object s8, Object s9, Object s10, Object s11, Object s12) throws Exception
     {
@@ -183,20 +191,25 @@ public class ParserImpl
         ParseTree.Expr expr   = (ParseTree.Expr)s3;
         Object id_type = env.Get(id.lexeme);
         {
-            // check if expr.type matches with id_type
-            if(id_type.equals("num")
-                && (expr instanceof ParseTree.ExprNumLit)
+            if (id_type != null) {
+                if(id_type.equals("num")
+                        && (expr instanceof ParseTree.ExprNumLit)
                 )
                 {} // ok
-            else if(id_type.equals("num")
-                && (expr instanceof ParseTree.ExprFuncCall)
-                && (env.Get(((ParseTree.ExprFuncCall)expr).ident).equals("num()"))
+                else if(id_type.equals("num")
+                        && (expr instanceof ParseTree.ExprFuncCall)
+                        && (env.Get(((ParseTree.ExprFuncCall)expr).ident).equals("num()"))
                 )
-            {} // ok
-            else
-            {
-                throw new Exception("semantic error");
+                {} // ok
+                else
+                {
+                    throw new Exception("semantic error");
+                }
+            } else {
+                throw new Exception("Identifier not found: " + id.lexeme);
             }
+            // check if expr.type matches with id_type
+
         }
         ParseTree.AssignStmt stmt = new ParseTree.AssignStmt(id.lexeme, expr);
         stmt.ident_reladdr = 1;
@@ -237,6 +250,7 @@ public class ParserImpl
         // 1. check if expr.value_type matches with the current function return type
         // 2. etc.
         // 3. create and return node
+        //ParseTree.TypeSpec returnType =
         ParseTree.Expr expr = (ParseTree.Expr)s2;
         return new ParseTree.ReturnStmt(expr);
     }
@@ -290,6 +304,12 @@ public class ParserImpl
         ArrayList<ParseTree.LocalDecl> localDecls = (ArrayList<ParseTree.LocalDecl>) s2;
         ArrayList<ParseTree.Stmt> stmtList = (ArrayList<ParseTree.Stmt>) s3;
         return new ParseTree.CompoundStmt(localDecls, stmtList);
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    Object args____arg_list(Object s1) {
+        return s1;
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -377,7 +397,7 @@ public class ParserImpl
     {
         // 1. create and return node that has int type
         Token token = (Token)s1;
-        double value = Integer.parseInt(token.lexeme);
+        double value = Double.parseDouble(token.lexeme);
         return new ParseTree.ExprNumLit(value);
     }
 }

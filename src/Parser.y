@@ -114,7 +114,8 @@ local_decls     : local_decls  local_decl                       { Debug("local_d
 local_decl      : VAR  IDENT  TYPEOF  type_spec  SEMI           { Debug("local_decl -> var IDENT :: type_spec ;"); $$ = localdecl____VAR_IDENT_TYPEOF_typespec_SEMI($1,$2,$3,$4,$5); }
                 ;
 
-args            :                                               { Debug("args -> eps"                           ); $$ = args____eps(); }
+args            : arg_list                                      { Debug("args -> arg_list"); $$ = args____arg_list($1);
+                |                                               { Debug("args -> eps"                           ); $$ = args____eps(); }
                 ;
 
 arg_list        : arg_list COMMA expr                           { Debug("arg_list -> arg_list COMMA expr");        $$ = arg_list____arg_list_COMMA_expr ($1, $2, $3); }
@@ -122,11 +123,24 @@ arg_list        : arg_list COMMA expr                           { Debug("arg_lis
                 ;
 
 expr            : expr ADD expr                                 { Debug("expr -> expr ADD expr"                 ); $$ = expr____expr_ADD_expr           ($1,$2,$3   ); }
+                | expr SUB expr
+                | expr MUL expr
+                | expr DIV expr
+                | expr MOD expr
                 | expr EQ  expr                                 { Debug("expr -> expr EQ  expr"                 ); $$ = expr____expr_EQ_expr            ($1,$2,$3   ); }
+                | expr NE expr
+                | expr LE expr
+                | expr LT expr
+                | expr GE expr
+                | expr GT expr
                 | LPAREN expr RPAREN                            { Debug("expr -> LPAREN expr RPAREN"            ); $$ = expr____LPAREN_expr_RPAREN      ($1,$2,$3   ); }
                 | IDENT                                         { Debug("expr -> IDENT"                         ); $$ = expr____IDENT                   ($1         ); }
                 | NUM_LIT                                       { Debug("expr -> NUM_LIT"                       ); $$ = expr____NUMLIT                  ($1         ); }
+                | BOOL_LIT
                 | IDENT LPAREN args RPAREN                      { Debug("expr -> IDENT LPAREN args RPAREN"      ); $$ = expr____IDENT_LPAREN_args_RPAREN($1,$2,$3,$4); }
+                | NEW prim_type LBRACKET expr RBRACKET
+                | IDENT LBRACKET expr RBRACKET
+                | IDENT DOT SIZE
                 ;
 
 %%
