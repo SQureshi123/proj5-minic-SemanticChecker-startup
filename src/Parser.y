@@ -82,8 +82,8 @@ stmt_list       : stmt_list stmt                                { Debug("stmt_li
                 ;
 
 stmt            : assign_stmt                                   { Debug("stmt -> assign_stmt"                   ); $$ = stmt____assignstmt      ($1); }
+                | print_stmt                                    { Debug("stmt -> print_stmt"                    ); $$ = stmt____printstmt       ($1); }
                 | return_stmt                                   { Debug("stmt -> return_stmt"                   ); $$ = stmt____returnstmt      ($1); }
-                | print_stmt                                       { Debug("stmt -> print_stmt"                    ); $$ = stmt____printstmt          ($1); }
                 | if_stmt                                       { Debug("stmt -> if_stmt"                       ); $$ = stmt____ifstmt          ($1); }
                 | while_stmt                                    { Debug("stmt -> while_stmt"                    ); $$ = stmt____whilestmt       ($1); }
                 | compound_stmt                                 { Debug("stmt -> compound_stmt"                 ); $$ = stmt____compoundstmt    ($1); }

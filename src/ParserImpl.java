@@ -45,7 +45,7 @@ public class ParserImpl
     }
     Object primtype____NUM(Object s1) throws Exception
     {
-        ParseTree.TypeSpec typespec = new ParseTree.TypeSpec("int");
+        ParseTree.TypeSpec typespec = new ParseTree.TypeSpec("num");
         return typespec;
     }
     Object primtype____BOOL(Object s1) throws Exception
@@ -61,7 +61,7 @@ public class ParserImpl
     Object typespec____primtype_LBRACKET_RBRACKET(Object s1, Object s2, Object s3) //NOT DONE
     {
         ParseTree.TypeSpec primtype = (ParseTree.TypeSpec)s1;
-        return primtype;
+        return new ParseTree.TypeSpec(primtype.typename + "[]");
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -72,16 +72,29 @@ public class ParserImpl
         // 2. create a new symbol table on top of env
         // 3. add parameters into top-local scope of env
         // 4. etc.
+        // 5. create and return funcdecl node
 
-        Token functionNameToken = (Token) s2;                                               //NEEDS FINISHED
+        Token id = (Token) s2;
         ParseTree.TypeSpec returnType = (ParseTree.TypeSpec) s4;
         ArrayList<ParseTree.Param> params = (ArrayList<ParseTree.Param>) s6;
-        ArrayList<ParseTree.LocalDecl> localDecls = (ArrayList<ParseTree.LocalDecl>) s8;
+        ArrayList<ParseTree.LocalDecl> localdecls = (ArrayList<ParseTree.LocalDecl>) s8;
         ArrayList<ParseTree.Stmt> stmtList = (ArrayList<ParseTree.Stmt>) s9;
 
-        return null;
+        HashMap<String, Object> funcInfo = new HashMap<>();
+        funcInfo.put("returnType",returnType);
+        funcInfo.put("parameters",params);
+        env.Put(id.lexeme, funcInfo);
 
+        env = new Env(env);
+
+        for (ParseTree.Param param : params) {
+            env.Put(param.ident, param);
+        }
+
+        ParseTree.FuncDecl funcdecl = new ParseTree.FuncDecl(id.lexeme, returnType, params, localdecls, stmtList);
+        return funcdecl;
     }
+
     Object fundecl____FUNC_IDENT_TYPEOF_typespec_LPAREN_params_RPAREN_BEGIN_localdecls_X10_stmtlist_END(Object s1, Object s2, Object s3, Object s4, Object s5, Object s6, Object s7, Object s8, Object s9, Object s10, Object s11, Object s12) throws Exception
     {
         // 1. check if this function has at least one return type
@@ -99,8 +112,8 @@ public class ParserImpl
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     Object params____paramlist(Object s1) throws Exception ///NOT DONE
     {
-        ParseTree.Param params = (ParseTree.Param) s1;
-        return params;
+        ArrayList<ParseTree.Param> paramList = (ArrayList<ParseTree.Param>) s1;
+        return paramList;
     }
 
     Object params____eps() throws Exception
@@ -118,9 +131,7 @@ public class ParserImpl
 
     Object paramlist____param(Object s1) throws Exception
     {
-        ArrayList<ParseTree.Param> paramList = new ArrayList<>();
-        paramList.add((ParseTree.Param) s1);
-        return paramList;
+        return s1;
     }
 
      Object param____IDENT_TYPEOF_typespec(Object s1, Object s2, Object s3) throws Exception
@@ -151,12 +162,12 @@ public class ParserImpl
         assert(s1 instanceof ParseTree.AssignStmt);
         return s1;
     }
-
-    Object stmt____printstmt  (Object s1) throws Exception
+    Object stmt____printstmt (Object s1) throws Exception
     {
         assert(s1 instanceof ParseTree.PrintStmt);
         return s1;
-    }Object stmt____returnstmt(Object s1) throws Exception
+    }
+    Object stmt____returnstmt(Object s1) throws Exception
     {
         assert(s1 instanceof ParseTree.ReturnStmt);
         return s1;
@@ -188,68 +199,23 @@ public class ParserImpl
 
     Object assignstmt____IDENT_ASSIGN_expr_SEMI(Object s1, Object s2, Object s3, Object s4) throws Exception
     {
-        // 1. check if ident.value_type matches with expr.value_type
-        // 2. etc.
-        // e. create and return node
-        Token          id     = (Token         )s1;
-        Token          assign = (Token         )s2;
-        ParseTree.Expr expr   = (ParseTree.Expr)s3;
-        Object id_type = env.Get(id.lexeme);
-        {
-            if (id_type != null) {
-                if(id_type.equals("num")
-                        && (expr instanceof ParseTree.ExprNumLit)
-                )
-                {} // ok
-                else if(id_type.equals("num")
-                        && (expr instanceof ParseTree.ExprFuncCall)
-                        && (env.Get(((ParseTree.ExprFuncCall)expr).ident).equals("num()"))
-                )
-                {} // ok
-                else
-                {
-                    throw new Exception("semantic error");
-                }
-            } else {
-                throw new Exception("Identifier not found: " + id.lexeme);
-            }
-            // check if expr.type matches with id_type
-
-        }
-        ParseTree.AssignStmt stmt = new ParseTree.AssignStmt(id.lexeme, expr);
-        stmt.ident_reladdr = 1;
-        return stmt;
+        Token id = (Token) s1;
+        ParseTree.Expr expr = (ParseTree.Expr) s3;
+        ParseTree.AssignStmt assignStmt = new ParseTree.AssignStmt(id.lexeme, expr);
+        assignStmt.ident_reladdr = 1;
+        return assignStmt;
     }
+
     Object assignstmt____IDENT_LBRACKET_expr_RBRACKET_ASSIGN_expr_SEMI(Object s1, Object s2, Object s3, Object s4, Object s5, Object s6, Object s7) throws Exception
     {
-
-        // 1. check if ident.value_type matches with expr.value_type
-        // 2. etc.
-        // e. create and return node
-        Token          id     = (Token         )s1;
-        Token          lbracket = (Token        )s2;
-        ParseTree.Expr expr   = (ParseTree.Expr)s3;
-        Object id_type = env.Get(id.lexeme);
-        {
-            // check if expr.type matches with id_type
-            if(id_type.equals("num")
-                    && (expr instanceof ParseTree.ExprNumLit)
-            )
-            {} // ok
-            else if(id_type.equals("num")
-                    && (expr instanceof ParseTree.ExprFuncCall)
-                    && (env.Get(((ParseTree.ExprFuncCall)expr).ident).equals("num()"))
-            )
-            {} // ok
-            else
-            {
-                throw new Exception("semantic error");
-            }
-        }
-        ParseTree.AssignStmt stmt = new ParseTree.AssignStmt(id.lexeme, expr);
-        stmt.ident_reladdr = 1;
-        return stmt;
+        Token id = (Token)s1;
+        ParseTree.Expr expr1 = (ParseTree.Expr)s3;
+        ParseTree.Expr expr2 = (ParseTree.Expr)s6;
+        ParseTree.AssignStmtForArray assignstmtArr = new ParseTree.AssignStmtForArray(id.lexeme, expr1, expr2);
+        assignstmtArr.ident_reladdr = 1;
+        return assignstmtArr;
     }
+
     Object returnstmt____RETURN_expr_SEMI(Object s1, Object s2, Object s3) throws Exception
     {
         // 1. check if expr.value_type matches with the current function return type
@@ -483,10 +449,10 @@ public class ParserImpl
         // 1. check if expr1.value_type matches with the expr2.value_type
         // 2. etc.
         // 3. create and return node that has value_type
-        ParseTree.Expr expr1 = (ParseTree.Expr)s1;
+        ParseTree.Expr expr = (ParseTree.Expr)s1;
         Token          oper  = (Token         )s2;
-        ParseTree.Expr expr2 = (ParseTree.Expr)s3;
-        return new ParseTree.ExprNot(expr1); //double check
+        ParseTree.Expr result = new ParseTree.ExprNot(expr);
+        return result;
     }
     Object expr____LPAREN_expr_RPAREN(Object s1, Object s2, Object s3) throws Exception
     {
@@ -533,26 +499,11 @@ public class ParserImpl
     }
     Object expr____IDENT_LBRACKET_expr_RBRACKET(Object s1, Object s2, Object s3, Object s4) throws Exception
     {
-        // 1. check if id.lexeme can be found in chained symbol tables
-        // 2. check if it is function type
-        // 3. check if the number and types of env(id.lexeme).params match with those of args
-        // 4. etc.
-        // 5. create and return node that has the value_type of env(id.lexeme).return_type
-        Token                    id   = (Token                   )s1;
-        ArrayList<ParseTree.Arg> args = (ArrayList<ParseTree.Arg>)s3;
-        Object func_attr = env.Get(id.lexeme);
-        {
-            // check if argument types match with function param types
-            if(env.Get(id.lexeme).equals("num()")
-                    && (args.size() == 0)
-            )
-            {} // ok
-            else
-            {
-                throw new Exception("semantic error");
-            }
-        }
-        return new ParseTree.ExprFuncCall(id.lexeme, args);
+        Token id = (Token) s1;
+        ParseTree.Expr expr = (ParseTree.Expr) s3;
+        ParseTree.ExprArrayElem result = new ParseTree.ExprArrayElem(id.lexeme, expr);
+        result.reladdr = 1;
+        return result;
     }
     Object expr____IDENT_DOT_SIZE(Object s1, Object s2, Object s3) throws Exception
     {

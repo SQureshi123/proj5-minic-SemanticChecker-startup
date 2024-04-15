@@ -219,7 +219,7 @@ final static short yydefred[] = {                         3,
     0,    0,    0,    0,    0,    0,   14,    8,    0,    0,
     0,   15,   32,   13,    0,    0,   31,   17,    0,    0,
     0,    0,    0,    0,    0,    0,   32,   10,   16,   18,
-   20,   19,   21,   22,   23,    0,    0,    0,    0,   54,
+   19,   20,   21,   22,   23,    0,    0,    0,    0,   54,
    55,    0,    0,    0,    0,    0,    0,    0,   33,    0,
     0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
     0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
@@ -444,8 +444,8 @@ final static String yyrule[] = {
 "stmt_list : stmt_list stmt",
 "stmt_list :",
 "stmt : assign_stmt",
-"stmt : return_stmt",
 "stmt : print_stmt",
+"stmt : return_stmt",
 "stmt : if_stmt",
 "stmt : while_stmt",
 "stmt : compound_stmt",
@@ -747,11 +747,11 @@ case 18:
 break;
 case 19:
 //#line 85 "Parser.y"
-{ Debug("stmt -> return_stmt"                   ); yyval.obj = stmt____returnstmt      (val_peek(0).obj); }
+{ Debug("stmt -> print_stmt"                    ); yyval.obj = stmt____printstmt       (val_peek(0).obj); }
 break;
 case 20:
 //#line 86 "Parser.y"
-{ Debug("stmt -> print_stmt"                    ); yyval.obj = stmt____printstmt          (val_peek(0).obj); }
+{ Debug("stmt -> return_stmt"                   ); yyval.obj = stmt____returnstmt      (val_peek(0).obj); }
 break;
 case 21:
 //#line 87 "Parser.y"
