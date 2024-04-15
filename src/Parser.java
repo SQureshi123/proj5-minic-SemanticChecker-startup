@@ -345,7 +345,8 @@ final static String yyrule[] = {
 
 
     public void yyerror (String error) {
-        //System.out.println ("Error message for " + lexer.lineno+":"+lexer.column +" by Parser.yyerror(): " + error);
+
+        System.out.println ("Error message for " + lexer.lineno+":"+lexer.column +" by Parser.yyerror(): " + error);
         int last_token_lineno = 0;
         int last_token_column = 0;
         System.out.println ("Error message by Parser.yyerror() at near " + last_token_lineno+":"+last_token_column + ": " + error);
@@ -356,7 +357,7 @@ final static String yyrule[] = {
         this.lexer   = new Lexer(r, this);
         this.yydebug = yydebug;
     }
-//#line 287 "Parser.java"
+//#line 288 "Parser.java"
 //###############################################################
 // method: yylexdebug : check lexer state
 //###############################################################
@@ -647,7 +648,7 @@ case 34:
 //#line 122 "Parser.y"
 { Debug("expr -> IDENT LPAREN args RPAREN"      ); yyval.obj = expr____IDENT_LPAREN_args_RPAREN(val_peek(3).obj,val_peek(2).obj,val_peek(1).obj,val_peek(0).obj); }
 break;
-//#line 572 "Parser.java"
+//#line 573 "Parser.java"
 //########## END OF USER-SUPPLIED ACTIONS ##########
     }//switch
     //#### Now let's reduce... ####

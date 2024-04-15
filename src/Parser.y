@@ -141,7 +141,8 @@ expr            : expr ADD expr                                 { Debug("expr ->
 
 
     public void yyerror (String error) {
-        //System.out.println ("Error message for " + lexer.lineno+":"+lexer.column +" by Parser.yyerror(): " + error);
+
+        System.out.println ("Error message for " + lexer.lineno+":"+lexer.column +" by Parser.yyerror(): " + error);
         int last_token_lineno = 0;
         int last_token_column = 0;
         System.out.println ("Error message by Parser.yyerror() at near " + last_token_lineno+":"+last_token_column + ": " + error);
