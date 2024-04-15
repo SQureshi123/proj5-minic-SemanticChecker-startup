@@ -153,11 +153,3 @@ Semantic Error Message Forms:
 "Unary operation ________ cannot be used with ________ value."
 
 
-    Object localdecl____VAR_IDENT_TYPEOF_typespec_SEMI(Object s1, Object s2, Object s3, Object s4, Object s5)
-      {
-          Token              id       = (Token             )s2;
-          ParseTree.TypeSpec typespec = (ParseTree.TypeSpec)s4;
-          ParseTree.LocalDecl localdecl = new ParseTree.LocalDecl(id.lexeme, typespec);
-          localdecl.reladdr = 1;
-          return localdecl;
-      }
