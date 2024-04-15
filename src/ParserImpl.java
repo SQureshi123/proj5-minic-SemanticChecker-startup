@@ -151,7 +151,12 @@ public class ParserImpl
         assert(s1 instanceof ParseTree.AssignStmt);
         return s1;
     }
-    Object stmt____returnstmt(Object s1) throws Exception
+
+    Object stmt____printstmt  (Object s1) throws Exception
+    {
+        assert(s1 instanceof ParseTree.PrintStmt);
+        return s1;
+    }Object stmt____returnstmt(Object s1) throws Exception
     {
         assert(s1 instanceof ParseTree.ReturnStmt);
         return s1;
@@ -350,7 +355,7 @@ public class ParserImpl
         Token          oper  = (Token         )s2;
         ParseTree.Expr expr2 = (ParseTree.Expr)s3;
         // check if expr1.type matches with expr2.type
-        return new ParseTree.ExprAdd(expr1,expr2);
+        return new ParseTree.ExprSub(expr1,expr2);
     }
     Object expr____expr_MUL_expr(Object s1, Object s2, Object s3) throws Exception
     {
@@ -361,7 +366,7 @@ public class ParserImpl
         Token          oper  = (Token         )s2;
         ParseTree.Expr expr2 = (ParseTree.Expr)s3;
         // check if expr1.type matches with expr2.type
-        return new ParseTree.ExprAdd(expr1,expr2);
+        return new ParseTree.ExprMul(expr1,expr2);
     }
     Object expr____expr_DIV_expr(Object s1, Object s2, Object s3) throws Exception
     {
@@ -372,7 +377,7 @@ public class ParserImpl
         Token          oper  = (Token         )s2;
         ParseTree.Expr expr2 = (ParseTree.Expr)s3;
         // check if expr1.type matches with expr2.type
-        return new ParseTree.ExprAdd(expr1,expr2);
+        return new ParseTree.ExprDiv(expr1,expr2);
     }
     Object expr____expr_MOD_expr(Object s1, Object s2, Object s3) throws Exception
     {
@@ -383,7 +388,7 @@ public class ParserImpl
         Token          oper  = (Token         )s2;
         ParseTree.Expr expr2 = (ParseTree.Expr)s3;
         // check if expr1.type matches with expr2.type
-        return new ParseTree.ExprAdd(expr1,expr2);
+        return new ParseTree.ExprMod(expr1,expr2);
     }
     Object expr____expr_EQ_expr(Object s1, Object s2, Object s3) throws Exception
     {
@@ -405,7 +410,7 @@ public class ParserImpl
         Token          oper  = (Token         )s2;
         ParseTree.Expr expr2 = (ParseTree.Expr)s3;
         // check if expr1.type matches with expr2.type
-        return new ParseTree.ExprEq(expr1,expr2);
+        return new ParseTree.ExprNe(expr1,expr2);
     }
     Object expr____expr_LE_expr(Object s1, Object s2, Object s3) throws Exception
     {
@@ -416,9 +421,9 @@ public class ParserImpl
         Token          oper  = (Token         )s2;
         ParseTree.Expr expr2 = (ParseTree.Expr)s3;
         // check if expr1.type matches with expr2.type
-        return new ParseTree.ExprEq(expr1,expr2);
+        return new ParseTree.ExprLe(expr1,expr2);
     }
-    Object expr____expr_NT_expr(Object s1, Object s2, Object s3) throws Exception
+    Object expr____expr_LT_expr(Object s1, Object s2, Object s3) throws Exception
     {
         // 1. check if expr1.value_type matches with the expr2.value_type
         // 2. etc.
@@ -427,7 +432,7 @@ public class ParserImpl
         Token          oper  = (Token         )s2;
         ParseTree.Expr expr2 = (ParseTree.Expr)s3;
         // check if expr1.type matches with expr2.type
-        return new ParseTree.ExprEq(expr1,expr2);
+        return new ParseTree.ExprLt(expr1,expr2);
     }
     Object expr____expr_GE_expr(Object s1, Object s2, Object s3) throws Exception
     {
@@ -438,7 +443,7 @@ public class ParserImpl
         Token          oper  = (Token         )s2;
         ParseTree.Expr expr2 = (ParseTree.Expr)s3;
         // check if expr1.type matches with expr2.type
-        return new ParseTree.ExprEq(expr1,expr2);
+        return new ParseTree.ExprGe(expr1,expr2);
     }
     Object expr____expr_GT_expr(Object s1, Object s2, Object s3) throws Exception
     {
@@ -449,7 +454,7 @@ public class ParserImpl
         Token          oper  = (Token         )s2;
         ParseTree.Expr expr2 = (ParseTree.Expr)s3;
         // check if expr1.type matches with expr2.type
-        return new ParseTree.ExprEq(expr1,expr2);
+        return new ParseTree.ExprGt(expr1,expr2);
     }
     Object expr____expr_AND_expr(Object s1, Object s2, Object s3) throws Exception
     {
@@ -460,7 +465,7 @@ public class ParserImpl
         Token          oper  = (Token         )s2;
         ParseTree.Expr expr2 = (ParseTree.Expr)s3;
         // check if expr1.type matches with expr2.type
-        return new ParseTree.ExprEq(expr1,expr2);
+        return new ParseTree.ExprAnd(expr1,expr2);
     }
     Object expr____expr_OR_expr(Object s1, Object s2, Object s3) throws Exception
     {
@@ -471,7 +476,7 @@ public class ParserImpl
         Token          oper  = (Token         )s2;
         ParseTree.Expr expr2 = (ParseTree.Expr)s3;
         // check if expr1.type matches with expr2.type
-        return new ParseTree.ExprEq(expr1,expr2);
+        return new ParseTree.ExprOr(expr1,expr2);
     }
     Object expr____expr_NOT_expr(Object s1, Object s2, Object s3) throws Exception
     {
@@ -481,8 +486,7 @@ public class ParserImpl
         ParseTree.Expr expr1 = (ParseTree.Expr)s1;
         Token          oper  = (Token         )s2;
         ParseTree.Expr expr2 = (ParseTree.Expr)s3;
-        // check if expr1.type matches with expr2.type
-        return new ParseTree.ExprEq(expr1,expr2);
+        return new ParseTree.ExprNot(expr1); //double check
     }
     Object expr____LPAREN_expr_RPAREN(Object s1, Object s2, Object s3) throws Exception
     {
@@ -503,6 +507,7 @@ public class ParserImpl
         expr.reladdr = 1;
         return expr;
     }
+
     Object expr____IDENT_LPAREN_args_RPAREN(Object s1, Object s2, Object s3, Object s4) throws Exception
     {
         // 1. check if id.lexeme can be found in chained symbol tables
@@ -526,11 +531,57 @@ public class ParserImpl
         }
         return new ParseTree.ExprFuncCall(id.lexeme, args);
     }
+    Object expr____IDENT_LBRACKET_expr_RBRACKET(Object s1, Object s2, Object s3, Object s4) throws Exception
+    {
+        // 1. check if id.lexeme can be found in chained symbol tables
+        // 2. check if it is function type
+        // 3. check if the number and types of env(id.lexeme).params match with those of args
+        // 4. etc.
+        // 5. create and return node that has the value_type of env(id.lexeme).return_type
+        Token                    id   = (Token                   )s1;
+        ArrayList<ParseTree.Arg> args = (ArrayList<ParseTree.Arg>)s3;
+        Object func_attr = env.Get(id.lexeme);
+        {
+            // check if argument types match with function param types
+            if(env.Get(id.lexeme).equals("num()")
+                    && (args.size() == 0)
+            )
+            {} // ok
+            else
+            {
+                throw new Exception("semantic error");
+            }
+        }
+        return new ParseTree.ExprFuncCall(id.lexeme, args);
+    }
+    Object expr____IDENT_DOT_SIZE(Object s1, Object s2, Object s3) throws Exception
+    {
+        Token id = (Token)s1;
+        ParseTree.ExprIdent expr = new ParseTree.ExprIdent(id.lexeme);
+        expr.reladdr = 1;
+        return expr;
+    }
+    Object expr____NEW_primtype_LBRACKET_expr_RBRACKET(Object s1, Object s2, Object s3, Object s4, Object s5) throws Exception
+    {
+        ParseTree.Expr primtype = (ParseTree.Expr)s2;
+        ParseTree.Expr expr = (ParseTree.Expr)s4;
+        return new ParseTree();
+
+        //FIX IT!!!
+
+    }
     Object expr____NUMLIT(Object s1) throws Exception
     {
         // 1. create and return node that has int type
         Token token = (Token)s1;
         double value = Double.parseDouble(token.lexeme);
         return new ParseTree.ExprNumLit(value);
+    }
+    Object expr____BOOLLIT(Object s1) throws Exception
+    {
+        // 1. create and return node that has int type
+        Token token = (Token)s1;
+        boolean value = Boolean.parseBoolean(token.lexeme);
+        return new ParseTree.ExprBoolLit(value);
     }
 }
