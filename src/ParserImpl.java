@@ -48,6 +48,11 @@ public class ParserImpl
         ParseTree.TypeSpec typespec = new ParseTree.TypeSpec("int");
         return typespec;
     }
+    Object primtype____BOOL(Object s1) throws Exception
+    {
+        ParseTree.TypeSpec typespec = new ParseTree.TypeSpec("bool");
+        return typespec;
+    }
     Object typespec____primtype(Object s1)
     {
         ParseTree.TypeSpec primtype = (ParseTree.TypeSpec)s1;
@@ -79,9 +84,34 @@ public class ParserImpl
         return funcdecl;
     }
 
-    Object params____eps() throws Exception 
+    Object params____eps() throws Exception
     {
         return new ArrayList<ParseTree.Param>();
+    }
+   Object paramlist____paramlist_COMMA_param(Object s1, Object s2, Object s3) throws Exception
+    {
+       ArrayList<ParseTree.Param> paramList = (ArrayList<ParseTree.Param>) s1;
+       ParseTree.Param param = (ParseTree.Param) s3;
+       paramList.add(param);
+       return paramList;
+
+    }
+
+    Object paramlist____param(Object s1) throws Exception
+    {
+        ArrayList<ParseTree.Param> paramList = new ArrayList<>();
+        paramList.add((ParseTree.Param) s1);
+        return paramList;
+    }
+
+     Object param____IDENT_TYPEOF_typespec(Object s1, Object s2, Object s3) throws Exception
+    {
+        Token id = (Token) s1;
+        ParseTree.TypeSpec typespec = (ParseTree.TypeSpec)s3;
+        ParseTree.LocalDecl localdecl = new ParseTree.LocalDecl(id.lexeme, typespec);
+        localdecl.reladdr = 1;
+        return localdecl;
+
     }
 
     Object stmtlist____stmtlist_stmt(Object s1, Object s2) throws Exception

@@ -17,12 +17,11 @@ public class Program {
         //  +"end\n"
         //  );
 
-        //  if(args.length == 0)
-        //  args = new String[]
-        //  {
-        //      "C:\\2019bFall-proj5-minc-SemanticChecker-startup\\sample\\minc\\"
-        //      +"test_01_main_succ.minc",
-        //  };
+          if(args.length == 0)
+          args = new String[]
+          {
+            "C:\\Users\\ShizaQ\\Downloads\\proj5-minic-SemanticChecker-startup\\proj5-minic-SemanticChecker-samples\\fail_01a.minc"             ,
+          };
 
         if(args.length <= 0)
             return;
