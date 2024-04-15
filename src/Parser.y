@@ -55,23 +55,26 @@ decl            : func_decl                                     { Debug("decl ->
                 ;
 
 prim_type       : NUM                                           { Debug("prim_type -> num"                      ); $$ = primtype____NUM($1); }
+                | BOOL                                          { Debug("prim_type -> bool"                     ); $$ = primtype____BOOL($1); }
                 ;
 
 type_spec       : prim_type                                     { Debug("type_spec -> prim_type"                ); $$ = typespec____primtype($1); }
+                | prim_type LBRACKET RBRACKET                   { Debug("type_spec -> prim_type LBRACKET RBRACKET"); $$= typespec____primtype_LBRACKET_RBRACKET($1, $2, $3); }
                 ;
 
 func_decl       : FUNC IDENT TYPEOF type_spec LPAREN params RPAREN BEGIN local_decls{ Debug("func_decl -> func ID::type_spec(params) begin local_decls"); $<obj>$ = fundecl____FUNC_IDENT_TYPEOF_typespec_LPAREN_params_RPAREN_BEGIN_localdecls_10X_stmtlist_END($1,$2,$3,$4,$5,$6,$7,$8,$9            ); }
                                                                        stmt_list END{ Debug("                                            stmt_list end"); $$ =      fundecl____FUNC_IDENT_TYPEOF_typespec_LPAREN_params_RPAREN_BEGIN_localdecls_X10_stmtlist_END($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12); }
                 ;
 
-params          :                                               { Debug("params -> eps"                         ); $$ = params____eps(); }
+params          :  param_list                                   { Debug ("params -> param_list"                 ); $$ = params____paramlist($1);  }
+                |                                               { Debug("params -> eps"                         ); $$ = params____eps(); }
                 ;
 
-param_list      : param_list COMMA param                        {  }
-                | param                                         {  }
+param_list      : param_list COMMA param                        {Debug("param_list -> param_list COMMA param"   ); $$ = paramlist____paramlist_COMMA_param($1, $2, $3); }
+                | param                                         {Debug("param_list -> param"                    ); $$ = paramlist____param($1); }
                 ;
 
-param           : IDENT TYPEOF type_spec                        {  }
+param           : IDENT TYPEOF type_spec                        { Debug("param -> IDENT TYPEOF type_spec"       ); $$ = param____IDENT_TYPEOF_typespec($1, $2, $3); }
                 ;
 
 stmt_list       : stmt_list stmt                                { Debug("stmt_list -> stmt_list stmt"           ); $$ = stmtlist____stmtlist_stmt($1,$2); }
@@ -83,6 +86,7 @@ stmt            : assign_stmt                                   { Debug("stmt ->
                 ;
 
 assign_stmt     : IDENT ASSIGN expr SEMI                        { Debug("assign_stmt -> IDENT := expr ;"        ); $$ = assignstmt____IDENT_ASSIGN_expr_SEMI($1,$2,$3,$4); }
+                | IDENT LBRACKET expr RBRACKET ASSIGN expr SEMI { Debug("assign_stmt -> IDENT := expr ;"        ); $$ = assignstmt____IDENT_LBRACKET_expr_RBRACKET_ASSIGN_expr_SEMI($1,$2,$3,$4,$5,$6,$7); }
                 ;
 
 print_stmt      : PRINT expr SEMI                               { Debug("print_stmt -> PRINT expr SEMI"); $$ = print_stmt____PRINT_expr_SEMI($1, $2, $3); }

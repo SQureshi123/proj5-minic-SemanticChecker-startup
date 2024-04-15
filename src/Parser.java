@@ -199,69 +199,81 @@ public final static short DOT=295;
 public final static short SIZE=296;
 public final static short YYERRCODE=256;
 final static short yylhs[] = {                           -1,
-    0,    1,    1,    2,    7,    6,   22,    3,    8,    9,
-    9,   10,   13,   13,   14,   14,   15,   16,   17,   18,
-   19,   20,    4,    4,    5,   11,   12,   12,   21,   21,
-   21,   21,   21,   21,
+    0,    1,    1,    2,    7,    7,    6,    6,   22,    3,
+    8,    8,    9,    9,   10,   13,   13,   14,   14,   15,
+   15,   16,   17,   18,   19,   20,    4,    4,    5,   11,
+   12,   12,   21,   21,   21,   21,   21,   21,
 };
 final static short yylen[] = {                            2,
-    1,    2,    0,    1,    1,    1,    0,   12,    0,    3,
-    1,    3,    2,    0,    1,    1,    4,    3,    3,    7,
-    5,    4,    2,    0,    5,    0,    3,    1,    3,    3,
-    3,    1,    1,    4,
+    1,    2,    0,    1,    1,    1,    1,    3,    0,   12,
+    1,    0,    3,    1,    3,    2,    0,    1,    1,    4,
+    7,    3,    3,    7,    5,    4,    2,    0,    5,    0,
+    3,    1,    3,    3,    3,    1,    1,    4,
 };
 final static short yydefred[] = {                         3,
-    0,    0,    0,    2,    4,    0,    0,    5,    0,    6,
-    9,    0,    0,   24,    0,    0,   23,   14,    0,    0,
-    0,    0,    0,    8,   13,   15,   16,    0,    0,    0,
-   33,    0,    0,   25,    0,   26,    0,    0,    0,   19,
-   17,    0,   31,    0,   29,   34,
+    0,    0,    0,    2,    4,    0,    0,    6,    5,    0,
+    0,    0,    0,    0,    0,    0,   14,    8,    0,    0,
+    0,   15,   28,   13,    0,    0,   27,   17,    0,    0,
+    0,    0,    0,   10,   16,   18,   19,    0,    0,    0,
+    0,   37,    0,    0,   29,    0,    0,   30,    0,    0,
+    0,   23,   20,    0,    0,   35,    0,   33,    0,   38,
+    0,   21,
 };
 final static short yydgoto[] = {                          1,
-    2,    4,    5,   15,   17,    9,   10,   12,    0,    0,
-   42,    0,   20,   25,   26,    0,   27,    0,    0,    0,
-   33,   18,
+    2,    4,    5,   25,   27,   10,   11,   15,   16,   17,
+   55,    0,   30,   35,   36,    0,   37,    0,    0,    0,
+   44,   28,
 };
 final static short yysindex[] = {                         0,
-    0, -266, -256,    0,    0, -264, -251,    0, -270,    0,
-    0, -250, -267,    0, -265, -244,    0,    0, -248, -262,
- -251, -218, -268,    0,    0,    0,    0, -247, -268, -246,
-    0, -268, -260,    0, -259,    0, -252, -268, -268,    0,
-    0, -245,    0, -227,    0,    0,
+    0, -277, -267,    0,    0, -266, -221,    0,    0, -265,
+ -268, -247, -270, -253, -261, -263,    0,    0, -221, -242,
+ -247,    0,    0,    0, -243, -222,    0,    0, -225, -258,
+ -221, -257, -269,    0,    0,    0,    0, -232, -269, -269,
+ -226,    0, -269, -255,    0, -252, -248,    0, -244, -269,
+ -269,    0,    0, -195, -220,    0, -201,    0, -269,    0,
+ -251,    0,
 };
 final static short yyrindex[] = {                         0,
-    0,   42,    0,    0,    0,    0,    0,    0,    0,    0,
-    0,    0,    0,    0, -249,    0,    0,    0,    0,    0,
-    0,    0,    0,    0,    0,    0,    0,    0,    0, -261,
+    0,   67,    0,    0,    0,    0,    0,    0,    0,    0,
+ -229, -219,    0,    0,    0, -218,    0,    0,    0,    0,
+    0,    0,    0,    0, -233,    0,    0,    0,    0,    0,
     0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
-    0,    0,    0, -258,    0,    0,
+ -259,    0,    0,    0,    0,    0,    0,    0,    0,    0,
+    0,    0,    0,    0,    0,    0, -254,    0,    0,    0,
+    0,    0,
 };
 final static short yygindex[] = {                         0,
-    0,    0,    0,    0,    0,   23,    0,    0,    0,    0,
+    0,    0,    0,    0,    0,   16,    0,    0,    0,   50,
     0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
-  -18,    0,
+    6,    0,
 };
-final static int YYTABLESIZE=45;
+final static int YYTABLESIZE=71;
 static short yytable[];
 static { yytable();}
 static void yytable(){
-yytable = new short[]{                         32,
-   38,   38,   30,   30,   31,   32,   39,   39,   38,   22,
-   35,    3,    7,   37,   39,    6,   11,   14,   32,   44,
-   45,   23,    7,   24,    8,   16,   32,   19,   21,   30,
-   32,   40,   41,   30,    7,   43,    7,   13,   29,   39,
-   36,    1,   46,   28,   34,
+yytable = new short[]{                         39,
+    3,   36,   41,   42,    6,   50,   34,   36,   50,   50,
+    7,   51,   50,   32,   51,   51,   50,   43,   51,   18,
+   13,   12,   51,   19,   14,   33,   20,   34,   36,   21,
+   36,   40,   36,   34,   22,   34,   52,   34,    9,   53,
+   62,   54,   23,   56,   46,   47,   38,   26,   49,   29,
+    9,   31,    9,    8,    9,   57,   58,    7,    7,   45,
+   48,   59,    7,    7,   61,   51,    1,   60,   12,   11,
+   24,
 };
 }
 static short yycheck[];
 static { yycheck(); }
 static void yycheck() {
-yycheck = new short[] {                        261,
-  261,  261,  261,  272,  273,  267,  267,  267,  261,  272,
-   29,  278,  277,   32,  267,  272,  287,  285,  287,   38,
-   39,  284,  272,  286,  276,  291,  288,  272,  277,  288,
-  292,  292,  292,  292,  284,  288,  286,  288,  257,  267,
-  287,    0,  288,   21,  292,
+yycheck = new short[] {                        257,
+  278,  261,  272,  273,  272,  261,  261,  267,  261,  261,
+  277,  267,  261,  272,  267,  267,  261,  287,  267,  290,
+  289,  287,  267,  277,  272,  284,  288,  286,  288,  293,
+  290,  289,  292,  288,   19,  290,  292,  292,  272,  292,
+  292,  290,  285,  288,   39,   40,   31,  291,   43,  272,
+  284,  277,  286,  275,  276,   50,   51,  287,  288,  292,
+  287,  257,  292,  293,   59,  267,    0,  288,  288,  288,
+   21,
 };
 }
 final static short YYFINAL=1;
@@ -295,9 +307,12 @@ final static String yyrule[] = {
 "decl_list :",
 "decl : func_decl",
 "prim_type : NUM",
+"prim_type : BOOL",
 "type_spec : prim_type",
+"type_spec : prim_type LBRACKET RBRACKET",
 "$$1 :",
 "func_decl : FUNC IDENT TYPEOF type_spec LPAREN params RPAREN BEGIN local_decls $$1 stmt_list END",
+"params : param_list",
 "params :",
 "param_list : param_list COMMA param",
 "param_list : param",
@@ -307,6 +322,7 @@ final static String yyrule[] = {
 "stmt : assign_stmt",
 "stmt : return_stmt",
 "assign_stmt : IDENT ASSIGN expr SEMI",
+"assign_stmt : IDENT LBRACKET expr RBRACKET ASSIGN expr SEMI",
 "print_stmt : PRINT expr SEMI",
 "return_stmt : RETURN expr SEMI",
 "if_stmt : IF expr THEN stmt_list ELSE stmt_list END",
@@ -326,7 +342,7 @@ final static String yyrule[] = {
 "expr : IDENT LPAREN args RPAREN",
 };
 
-//#line 126 "Parser.y"
+//#line 130 "Parser.y"
     private Lexer lexer;
     private Token last_token;
 
@@ -357,7 +373,7 @@ final static String yyrule[] = {
         this.lexer   = new Lexer(r, this);
         this.yydebug = yydebug;
     }
-//#line 288 "Parser.java"
+//#line 304 "Parser.java"
 //###############################################################
 // method: yylexdebug : check lexer state
 //###############################################################
@@ -533,122 +549,138 @@ case 5:
 { Debug("prim_type -> num"                      ); yyval.obj = primtype____NUM(val_peek(0).obj); }
 break;
 case 6:
-//#line 60 "Parser.y"
-{ Debug("type_spec -> prim_type"                ); yyval.obj = typespec____primtype(val_peek(0).obj); }
+//#line 58 "Parser.y"
+{ Debug("prim_type -> bool"                     ); yyval.obj = primtype____BOOL(val_peek(0).obj); }
 break;
 case 7:
-//#line 63 "Parser.y"
-{ Debug("func_decl -> func ID::type_spec(params) begin local_decls"); yyval.obj = fundecl____FUNC_IDENT_TYPEOF_typespec_LPAREN_params_RPAREN_BEGIN_localdecls_10X_stmtlist_END(val_peek(8).obj,val_peek(7).obj,val_peek(6).obj,val_peek(5).obj,val_peek(4).obj,val_peek(3).obj,val_peek(2).obj,val_peek(1).obj,val_peek(0).obj            ); }
+//#line 61 "Parser.y"
+{ Debug("type_spec -> prim_type"                ); yyval.obj = typespec____primtype(val_peek(0).obj); }
 break;
 case 8:
-//#line 64 "Parser.y"
-{ Debug("                                            stmt_list end"); yyval.obj =      fundecl____FUNC_IDENT_TYPEOF_typespec_LPAREN_params_RPAREN_BEGIN_localdecls_X10_stmtlist_END(val_peek(11).obj,val_peek(10).obj,val_peek(9).obj,val_peek(8).obj,val_peek(7).obj,val_peek(6).obj,val_peek(5).obj,val_peek(4).obj,val_peek(3).obj,val_peek(2).obj,val_peek(1).obj,val_peek(0).obj); }
+//#line 62 "Parser.y"
+{ Debug("type_spec -> prim_type LBRACKET RBRACKET"); yyval.obj= typespec____primtype_LBRACKET_RBRACKET(val_peek(2).obj, val_peek(1).obj, val_peek(0).obj); }
 break;
 case 9:
-//#line 67 "Parser.y"
-{ Debug("params -> eps"                         ); yyval.obj = params____eps(); }
+//#line 65 "Parser.y"
+{ Debug("func_decl -> func ID::type_spec(params) begin local_decls"); yyval.obj = fundecl____FUNC_IDENT_TYPEOF_typespec_LPAREN_params_RPAREN_BEGIN_localdecls_10X_stmtlist_END(val_peek(8).obj,val_peek(7).obj,val_peek(6).obj,val_peek(5).obj,val_peek(4).obj,val_peek(3).obj,val_peek(2).obj,val_peek(1).obj,val_peek(0).obj            ); }
 break;
 case 10:
-//#line 70 "Parser.y"
-{  }
+//#line 66 "Parser.y"
+{ Debug("                                            stmt_list end"); yyval.obj =      fundecl____FUNC_IDENT_TYPEOF_typespec_LPAREN_params_RPAREN_BEGIN_localdecls_X10_stmtlist_END(val_peek(11).obj,val_peek(10).obj,val_peek(9).obj,val_peek(8).obj,val_peek(7).obj,val_peek(6).obj,val_peek(5).obj,val_peek(4).obj,val_peek(3).obj,val_peek(2).obj,val_peek(1).obj,val_peek(0).obj); }
 break;
 case 11:
-//#line 71 "Parser.y"
-{  }
+//#line 69 "Parser.y"
+{ Debug ("params -> param_list"                 ); yyval.obj = params____paramlist(val_peek(0).obj);  }
 break;
 case 12:
-//#line 74 "Parser.y"
-{  }
+//#line 70 "Parser.y"
+{ Debug("params -> eps"                         ); yyval.obj = params____eps(); }
 break;
 case 13:
-//#line 77 "Parser.y"
-{ Debug("stmt_list -> stmt_list stmt"           ); yyval.obj = stmtlist____stmtlist_stmt(val_peek(1).obj,val_peek(0).obj); }
+//#line 73 "Parser.y"
+{Debug("param_list -> param_list COMMA param"   ); yyval.obj = paramlist____paramlist_COMMA_param(val_peek(2).obj, val_peek(1).obj, val_peek(0).obj); }
 break;
 case 14:
-//#line 78 "Parser.y"
-{ Debug("stmt_list -> eps"                      ); yyval.obj = stmtlist____eps          (     ); }
+//#line 74 "Parser.y"
+{Debug("param_list -> param"                    ); yyval.obj = paramlist____param(val_peek(0).obj); }
 break;
 case 15:
-//#line 81 "Parser.y"
-{ Debug("stmt -> assign_stmt"                   ); yyval.obj = stmt____assignstmt  (val_peek(0).obj); }
+//#line 77 "Parser.y"
+{ Debug("param -> IDENT TYPEOF type_spec"       ); yyval.obj = param____IDENT_TYPEOF_typespec(val_peek(2).obj, val_peek(1).obj, val_peek(0).obj); }
 break;
 case 16:
-//#line 82 "Parser.y"
-{ Debug("stmt -> return_stmt"                   ); yyval.obj = stmt____returnstmt  (val_peek(0).obj); }
+//#line 80 "Parser.y"
+{ Debug("stmt_list -> stmt_list stmt"           ); yyval.obj = stmtlist____stmtlist_stmt(val_peek(1).obj,val_peek(0).obj); }
 break;
 case 17:
-//#line 85 "Parser.y"
-{ Debug("assign_stmt -> IDENT := expr ;"        ); yyval.obj = assignstmt____IDENT_ASSIGN_expr_SEMI(val_peek(3).obj,val_peek(2).obj,val_peek(1).obj,val_peek(0).obj); }
+//#line 81 "Parser.y"
+{ Debug("stmt_list -> eps"                      ); yyval.obj = stmtlist____eps          (     ); }
 break;
 case 18:
-//#line 88 "Parser.y"
-{ Debug("print_stmt -> PRINT expr SEMI"); yyval.obj = print_stmt____PRINT_expr_SEMI(val_peek(2).obj, val_peek(1).obj, val_peek(0).obj); }
+//#line 84 "Parser.y"
+{ Debug("stmt -> assign_stmt"                   ); yyval.obj = stmt____assignstmt  (val_peek(0).obj); }
 break;
 case 19:
-//#line 91 "Parser.y"
-{ Debug("return_stmt -> return expr ;"          ); yyval.obj = returnstmt____RETURN_expr_SEMI(val_peek(2).obj,val_peek(1).obj,val_peek(0).obj); }
+//#line 85 "Parser.y"
+{ Debug("stmt -> return_stmt"                   ); yyval.obj = stmt____returnstmt  (val_peek(0).obj); }
 break;
 case 20:
-//#line 94 "Parser.y"
-{ Debug("if_stmt -> IF expr THEN stmt_list ELSE stmt_list END"); yyval.obj = if_stmt____IF_expr_THEN_stmt_list_ELSE_stmt_list_END(val_peek(6).obj,val_peek(5).obj,val_peek(4).obj,val_peek(3).obj,val_peek(2).obj); }
+//#line 88 "Parser.y"
+{ Debug("assign_stmt -> IDENT := expr ;"        ); yyval.obj = assignstmt____IDENT_ASSIGN_expr_SEMI(val_peek(3).obj,val_peek(2).obj,val_peek(1).obj,val_peek(0).obj); }
 break;
 case 21:
-//#line 97 "Parser.y"
-{ Debug("while_stmt -> WHILE expr BEGIN stmt_list END"); yyval.obj = while_stmt____WHILE_expr_BEGIN_stmt_list_END(val_peek(4).obj,val_peek(3).obj,val_peek(2).obj,val_peek(1).obj); }
+//#line 89 "Parser.y"
+{ Debug("assign_stmt -> IDENT := expr ;"        ); yyval.obj = assignstmt____IDENT_LBRACKET_expr_RBRACKET_ASSIGN_expr_SEMI(val_peek(6).obj,val_peek(5).obj,val_peek(4).obj,val_peek(3).obj,val_peek(2).obj,val_peek(1).obj,val_peek(0).obj); }
 break;
 case 22:
-//#line 100 "Parser.y"
-{ Debug("compound_stmt -> BEGIN local_decls stmt_list END"); yyval.obj = compound_stmt____BEGIN_local_decls_stmt_list_END(val_peek(3).obj,val_peek(2).obj,val_peek(1).obj,val_peek(0).obj); }
+//#line 92 "Parser.y"
+{ Debug("print_stmt -> PRINT expr SEMI"); yyval.obj = print_stmt____PRINT_expr_SEMI(val_peek(2).obj, val_peek(1).obj, val_peek(0).obj); }
 break;
 case 23:
-//#line 103 "Parser.y"
-{ Debug("local_decls -> local_decls local_decl" ); yyval.obj = localdecls____localdecls_localdecl(val_peek(1).obj,val_peek(0).obj); }
+//#line 95 "Parser.y"
+{ Debug("return_stmt -> return expr ;"          ); yyval.obj = returnstmt____RETURN_expr_SEMI(val_peek(2).obj,val_peek(1).obj,val_peek(0).obj); }
 break;
 case 24:
-//#line 104 "Parser.y"
-{ Debug("local_decls -> eps"                    ); yyval.obj = localdecls____eps(); }
+//#line 98 "Parser.y"
+{ Debug("if_stmt -> IF expr THEN stmt_list ELSE stmt_list END"); yyval.obj = if_stmt____IF_expr_THEN_stmt_list_ELSE_stmt_list_END(val_peek(6).obj,val_peek(5).obj,val_peek(4).obj,val_peek(3).obj,val_peek(2).obj); }
 break;
 case 25:
-//#line 107 "Parser.y"
-{ Debug("local_decl -> var IDENT :: type_spec ;"); yyval.obj = localdecl____VAR_IDENT_TYPEOF_typespec_SEMI(val_peek(4).obj,val_peek(3).obj,val_peek(2).obj,val_peek(1).obj,val_peek(0).obj); }
+//#line 101 "Parser.y"
+{ Debug("while_stmt -> WHILE expr BEGIN stmt_list END"); yyval.obj = while_stmt____WHILE_expr_BEGIN_stmt_list_END(val_peek(4).obj,val_peek(3).obj,val_peek(2).obj,val_peek(1).obj); }
 break;
 case 26:
-//#line 110 "Parser.y"
-{ Debug("args -> eps"                           ); yyval.obj = args____eps(); }
+//#line 104 "Parser.y"
+{ Debug("compound_stmt -> BEGIN local_decls stmt_list END"); yyval.obj = compound_stmt____BEGIN_local_decls_stmt_list_END(val_peek(3).obj,val_peek(2).obj,val_peek(1).obj,val_peek(0).obj); }
 break;
 case 27:
-//#line 113 "Parser.y"
-{ Debug("arg_list -> arg_list COMMA expr");        yyval.obj = arg_list____arg_list_COMMA_expr (val_peek(2).obj, val_peek(1).obj, val_peek(0).obj); }
+//#line 107 "Parser.y"
+{ Debug("local_decls -> local_decls local_decl" ); yyval.obj = localdecls____localdecls_localdecl(val_peek(1).obj,val_peek(0).obj); }
 break;
 case 28:
-//#line 114 "Parser.y"
-{ Debug("arg_list -> expr");                       yyval.obj = arg_list____expr(val_peek(0).obj); }
+//#line 108 "Parser.y"
+{ Debug("local_decls -> eps"                    ); yyval.obj = localdecls____eps(); }
 break;
 case 29:
-//#line 117 "Parser.y"
-{ Debug("expr -> expr ADD expr"                 ); yyval.obj = expr____expr_ADD_expr           (val_peek(2).obj,val_peek(1).obj,val_peek(0).obj   ); }
+//#line 111 "Parser.y"
+{ Debug("local_decl -> var IDENT :: type_spec ;"); yyval.obj = localdecl____VAR_IDENT_TYPEOF_typespec_SEMI(val_peek(4).obj,val_peek(3).obj,val_peek(2).obj,val_peek(1).obj,val_peek(0).obj); }
 break;
 case 30:
-//#line 118 "Parser.y"
-{ Debug("expr -> expr EQ  expr"                 ); yyval.obj = expr____expr_EQ_expr            (val_peek(2).obj,val_peek(1).obj,val_peek(0).obj   ); }
+//#line 114 "Parser.y"
+{ Debug("args -> eps"                           ); yyval.obj = args____eps(); }
 break;
 case 31:
-//#line 119 "Parser.y"
-{ Debug("expr -> LPAREN expr RPAREN"            ); yyval.obj = expr____LPAREN_expr_RPAREN      (val_peek(2).obj,val_peek(1).obj,val_peek(0).obj   ); }
+//#line 117 "Parser.y"
+{ Debug("arg_list -> arg_list COMMA expr");        yyval.obj = arg_list____arg_list_COMMA_expr (val_peek(2).obj, val_peek(1).obj, val_peek(0).obj); }
 break;
 case 32:
-//#line 120 "Parser.y"
-{ Debug("expr -> IDENT"                         ); yyval.obj = expr____IDENT                   (val_peek(0).obj         ); }
+//#line 118 "Parser.y"
+{ Debug("arg_list -> expr");                       yyval.obj = arg_list____expr(val_peek(0).obj); }
 break;
 case 33:
 //#line 121 "Parser.y"
-{ Debug("expr -> NUM_LIT"                       ); yyval.obj = expr____NUMLIT                  (val_peek(0).obj         ); }
+{ Debug("expr -> expr ADD expr"                 ); yyval.obj = expr____expr_ADD_expr           (val_peek(2).obj,val_peek(1).obj,val_peek(0).obj   ); }
 break;
 case 34:
 //#line 122 "Parser.y"
+{ Debug("expr -> expr EQ  expr"                 ); yyval.obj = expr____expr_EQ_expr            (val_peek(2).obj,val_peek(1).obj,val_peek(0).obj   ); }
+break;
+case 35:
+//#line 123 "Parser.y"
+{ Debug("expr -> LPAREN expr RPAREN"            ); yyval.obj = expr____LPAREN_expr_RPAREN      (val_peek(2).obj,val_peek(1).obj,val_peek(0).obj   ); }
+break;
+case 36:
+//#line 124 "Parser.y"
+{ Debug("expr -> IDENT"                         ); yyval.obj = expr____IDENT                   (val_peek(0).obj         ); }
+break;
+case 37:
+//#line 125 "Parser.y"
+{ Debug("expr -> NUM_LIT"                       ); yyval.obj = expr____NUMLIT                  (val_peek(0).obj         ); }
+break;
+case 38:
+//#line 126 "Parser.y"
 { Debug("expr -> IDENT LPAREN args RPAREN"      ); yyval.obj = expr____IDENT_LPAREN_args_RPAREN(val_peek(3).obj,val_peek(2).obj,val_peek(1).obj,val_peek(0).obj); }
 break;
-//#line 573 "Parser.java"
+//#line 605 "Parser.java"
 //########## END OF USER-SUPPLIED ACTIONS ##########
     }//switch
     //#### Now let's reduce... ####
