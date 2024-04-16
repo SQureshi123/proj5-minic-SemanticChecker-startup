@@ -20,7 +20,7 @@ public class Program {
           if(args.length == 0)
           args = new String[]
           {
-            "C:\\Users\\tyler\\Desktop\\proj5-minic-SemanticChecker-startup\\proj5-minic-SemanticChecker-samples\\succ_01.minc"             ,
+            "C:\\Users\\tyler\\Desktop\\proj5-minic-SemanticChecker-startup\\proj5-minic-SemanticChecker-samples\\succ_04.minc"             ,
           };
 
         if(args.length <= 0)
