@@ -10,10 +10,6 @@
  * License: BSD                                                            *
  *                                                                         *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-/*
- * Khoa Nguyen
- * YiFei Chen
- * */
 
 %{
 import java.io.*;

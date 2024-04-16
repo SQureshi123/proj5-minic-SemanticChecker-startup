@@ -16,7 +16,7 @@
 
 
 
-//#line 19 "Parser.y"
+//#line 15 "Parser.y"
 import java.io.*;
 //#line 19 "Parser.java"
 
@@ -485,7 +485,7 @@ final static String yyrule[] = {
 "expr : IDENT DOT SIZE",
 };
 
-//#line 155 "Parser.y"
+//#line 151 "Parser.y"
     private Lexer lexer;
     private Token last_token;
 
@@ -671,239 +671,239 @@ boolean doaction;
       {
 //########## USER-SUPPLIED ACTIONS ##########
 case 1:
-//#line 51 "Parser.y"
+//#line 47 "Parser.y"
 { Debug("program -> decl_list"                  ); yyval.obj = program____decllist(val_peek(0).obj); }
 break;
 case 2:
-//#line 54 "Parser.y"
+//#line 50 "Parser.y"
 { Debug("decl_list -> decl_list decl"           ); yyval.obj = decllist____decllist_decl(val_peek(1).obj,val_peek(0).obj); }
 break;
 case 3:
-//#line 55 "Parser.y"
+//#line 51 "Parser.y"
 { Debug("decl_list -> eps"                      ); yyval.obj = decllist____eps          (     ); }
 break;
 case 4:
-//#line 58 "Parser.y"
+//#line 54 "Parser.y"
 { Debug("decl -> func_decl"                     ); yyval.obj = decl____funcdecl(val_peek(0).obj); }
 break;
 case 5:
-//#line 61 "Parser.y"
+//#line 57 "Parser.y"
 { Debug("func_decl -> func ID::type_spec(params) begin local_decls"); yyval.obj = fundecl____FUNC_IDENT_TYPEOF_typespec_LPAREN_params_RPAREN_BEGIN_localdecls_10X_stmtlist_END(val_peek(8).obj,val_peek(7).obj,val_peek(6).obj,val_peek(5).obj,val_peek(4).obj,val_peek(3).obj,val_peek(2).obj,val_peek(1).obj,val_peek(0).obj            ); }
 break;
 case 6:
-//#line 62 "Parser.y"
+//#line 58 "Parser.y"
 { Debug("                                            stmt_list end"); yyval.obj =      fundecl____FUNC_IDENT_TYPEOF_typespec_LPAREN_params_RPAREN_BEGIN_localdecls_X10_stmtlist_END(val_peek(11).obj,val_peek(10).obj,val_peek(9).obj,val_peek(8).obj,val_peek(7).obj,val_peek(6).obj,val_peek(5).obj,val_peek(4).obj,val_peek(3).obj,val_peek(2).obj,val_peek(1).obj,val_peek(0).obj); }
 break;
 case 7:
-//#line 65 "Parser.y"
+//#line 61 "Parser.y"
 { Debug("params -> param_list"                  ); yyval.obj = params____paramlist(val_peek(0).obj); }
 break;
 case 8:
-//#line 66 "Parser.y"
+//#line 62 "Parser.y"
 { Debug("params -> eps"                         ); yyval.obj = params____eps(); }
 break;
 case 9:
-//#line 69 "Parser.y"
+//#line 65 "Parser.y"
 { Debug("param_list -> param_list , param"      ); yyval.obj = paramlist____paramlist_COMMA_param(val_peek(2).obj, val_peek(1).obj, val_peek(0).obj); }
 break;
 case 10:
-//#line 70 "Parser.y"
+//#line 66 "Parser.y"
 { Debug("param_list -> param"                   ); yyval.obj = paramlist____param(val_peek(0).obj); }
 break;
 case 11:
-//#line 73 "Parser.y"
+//#line 69 "Parser.y"
 { Debug("param -> IDENT :: type_spec"           ); yyval.obj = param____IDENT_TYPEOF_typespec(val_peek(2).obj, val_peek(1).obj, val_peek(0).obj); }
 break;
 case 12:
-//#line 76 "Parser.y"
+//#line 72 "Parser.y"
 { Debug("type_spec -> prim_type"                ); yyval.obj = typespec____primtype(val_peek(0).obj); }
 break;
 case 13:
-//#line 77 "Parser.y"
+//#line 73 "Parser.y"
 { Debug("type_spec -> prim_type [ ]"); yyval.obj = typespec____primtype_LBRACKET_RBRACKET(val_peek(2).obj,val_peek(1).obj,val_peek(0).obj); }
 break;
 case 14:
-//#line 80 "Parser.y"
+//#line 76 "Parser.y"
 { Debug("prim_type -> NUM"                      ); yyval.obj = primtype____NUM(val_peek(0).obj); }
 break;
 case 15:
-//#line 81 "Parser.y"
+//#line 77 "Parser.y"
 { Debug("primtype -> BOOL"                      ); yyval.obj = primtype____BOOL(val_peek(0).obj); }
 break;
 case 16:
-//#line 84 "Parser.y"
+//#line 80 "Parser.y"
 { Debug("local_decls -> local_decls local_decl" ); yyval.obj = localdecls____localdecls_localdecl(val_peek(1).obj,val_peek(0).obj); }
 break;
 case 17:
-//#line 85 "Parser.y"
+//#line 81 "Parser.y"
 { Debug("local_decls -> eps"                    ); yyval.obj = localdecls____eps(); }
 break;
 case 18:
-//#line 88 "Parser.y"
+//#line 84 "Parser.y"
 { Debug("local_decl -> var IDENT :: type_spec ;"); yyval.obj = localdecl____VAR_IDENT_TYPEOF_typespec_SEMI(val_peek(4).obj,val_peek(3).obj,val_peek(2).obj,val_peek(1).obj,val_peek(0).obj); }
 break;
 case 19:
-//#line 91 "Parser.y"
+//#line 87 "Parser.y"
 { Debug("stmt_list -> stmt_list stmt"           ); yyval.obj = stmtlist____stmtlist_stmt(val_peek(1).obj,val_peek(0).obj); }
 break;
 case 20:
-//#line 92 "Parser.y"
+//#line 88 "Parser.y"
 { Debug("stmt_list -> eps"                      ); yyval.obj = stmtlist____eps          (     ); }
 break;
 case 21:
-//#line 95 "Parser.y"
+//#line 91 "Parser.y"
 { Debug("stmt -> assign_stmt"                   ); yyval.obj = stmt____assignstmt  (val_peek(0).obj); }
 break;
 case 22:
-//#line 96 "Parser.y"
+//#line 92 "Parser.y"
 { Debug("stmt -> print_stmt"                    ); yyval.obj = stmt____printstmt   (val_peek(0).obj); }
 break;
 case 23:
-//#line 97 "Parser.y"
+//#line 93 "Parser.y"
 { Debug("stmt -> return_stmt"                   ); yyval.obj = stmt____returnstmt  (val_peek(0).obj); }
 break;
 case 24:
-//#line 98 "Parser.y"
+//#line 94 "Parser.y"
 { Debug("stmt -> if_stmt"                       ); yyval.obj = stmt____ifstmt      (val_peek(0).obj); }
 break;
 case 25:
-//#line 99 "Parser.y"
+//#line 95 "Parser.y"
 { Debug("stmt -> while_stmt"                    ); yyval.obj = stmt____whilestmt   (val_peek(0).obj); }
 break;
 case 26:
-//#line 100 "Parser.y"
+//#line 96 "Parser.y"
 { Debug("stmt -> compound_stmt"                 ); yyval.obj = stmt____compoundstmt(val_peek(0).obj); }
 break;
 case 27:
-//#line 103 "Parser.y"
+//#line 99 "Parser.y"
 { Debug("assign_stmt -> IDENT := expr ;"        ); yyval.obj = assignstmt____IDENT_ASSIGN_expr_SEMI(val_peek(3).obj,val_peek(2).obj,val_peek(1).obj,val_peek(0).obj); }
 break;
 case 28:
-//#line 104 "Parser.y"
+//#line 100 "Parser.y"
 { Debug("assign_stmt -> IDENT [ expr ] := expr ;"); yyval.obj = assignstmt____IDENT_LBRACKET_expr_RBRACKET_ASSIGN_expr_SEMI(val_peek(6).obj,val_peek(5).obj,val_peek(4).obj,val_peek(3).obj,val_peek(2).obj,val_peek(1).obj,val_peek(0).obj); }
 break;
 case 29:
-//#line 107 "Parser.y"
+//#line 103 "Parser.y"
 { Debug("print_stmt -> print expr ;"            ); yyval.obj = print_stmt____PRINT_expr_SEMI(val_peek(2).obj,val_peek(1).obj,val_peek(0).obj); }
 break;
 case 30:
-//#line 110 "Parser.y"
+//#line 106 "Parser.y"
 { Debug("return_stmt -> return expr ;"          ); yyval.obj = returnstmt____RETURN_expr_SEMI(val_peek(2).obj,val_peek(1).obj,val_peek(0).obj); }
 break;
 case 31:
-//#line 113 "Parser.y"
+//#line 109 "Parser.y"
 { Debug("if_stmt -> IF expr THEN stmt_list ELSE stmt_list END"); yyval.obj = if_stmt____IF_expr_THEN_stmt_list_ELSE_stmt_list_END(val_peek(6).obj,val_peek(5).obj,val_peek(4).obj,val_peek(3).obj,val_peek(2).obj,val_peek(1).obj,val_peek(0).obj); }
 break;
 case 32:
-//#line 116 "Parser.y"
+//#line 112 "Parser.y"
 { Debug("while_stmt -> WHILE expr BEGIN stmt_list END"); yyval.obj = while_stmt____WHILE_expr_BEGIN_stmt_list_END(val_peek(4).obj,val_peek(3).obj,val_peek(2).obj,val_peek(1).obj,val_peek(0).obj); }
 break;
 case 33:
-//#line 119 "Parser.y"
+//#line 115 "Parser.y"
 { Debug("compound_stmt -> BEGIN local_decls stmt_list END"); yyval.obj = compound_stmt____BEGIN_local_decls_stmt_list_END(val_peek(3).obj,val_peek(2).obj,val_peek(1).obj,val_peek(0).obj); }
 break;
 case 34:
-//#line 122 "Parser.y"
+//#line 118 "Parser.y"
 { Debug("args -> arg_list"                      ); yyval.obj = args____arg_list(val_peek(0).obj); }
 break;
 case 35:
-//#line 123 "Parser.y"
+//#line 119 "Parser.y"
 { Debug("args -> eps"                           ); yyval.obj = args____eps(); }
 break;
 case 36:
-//#line 126 "Parser.y"
+//#line 122 "Parser.y"
 { Debug("arg_list -> arg_list , expr"           ); yyval.obj = arg_list____arg_list_COMMA_expr(val_peek(2).obj,val_peek(1).obj,val_peek(0).obj); }
 break;
 case 37:
-//#line 127 "Parser.y"
+//#line 123 "Parser.y"
 { Debug("arg_list -> expr"                      ); yyval.obj = arg_list____expr              (val_peek(0).obj); }
 break;
 case 38:
-//#line 130 "Parser.y"
+//#line 126 "Parser.y"
 { Debug("expr -> expr ADD expr"                 ); yyval.obj = expr____expr_ADD_expr           (val_peek(2).obj,val_peek(1).obj,val_peek(0).obj   ); }
 break;
 case 39:
-//#line 131 "Parser.y"
+//#line 127 "Parser.y"
 { Debug("expr -> expr SUB expr"                 ); yyval.obj = expr____expr_SUB_expr           (val_peek(2).obj,val_peek(1).obj,val_peek(0).obj   ); }
 break;
 case 40:
-//#line 132 "Parser.y"
+//#line 128 "Parser.y"
 { Debug("expr -> expr MUL expr"                 ); yyval.obj = expr____expr_MUL_expr           (val_peek(2).obj,val_peek(1).obj,val_peek(0).obj   ); }
 break;
 case 41:
-//#line 133 "Parser.y"
+//#line 129 "Parser.y"
 { Debug("expr -> expr DIV expr"                 ); yyval.obj = expr____expr_DIV_expr           (val_peek(2).obj,val_peek(1).obj,val_peek(0).obj   ); }
 break;
 case 42:
-//#line 134 "Parser.y"
+//#line 130 "Parser.y"
 { Debug("expr -> expr MOD expr"                 ); yyval.obj = expr____expr_MOD_expr           (val_peek(2).obj,val_peek(1).obj,val_peek(0).obj   ); }
 break;
 case 43:
-//#line 135 "Parser.y"
+//#line 131 "Parser.y"
 { Debug("expr -> expr EQ  expr"                 ); yyval.obj = expr____expr_EQ_expr            (val_peek(2).obj,val_peek(1).obj,val_peek(0).obj   ); }
 break;
 case 44:
-//#line 136 "Parser.y"
+//#line 132 "Parser.y"
 { Debug("expr -> expr NE expr"                  ); yyval.obj = expr____expr_NE_expr            (val_peek(2).obj,val_peek(1).obj,val_peek(0).obj   ); }
 break;
 case 45:
-//#line 137 "Parser.y"
+//#line 133 "Parser.y"
 { Debug("expr -> expr LE expr"                  ); yyval.obj = expr____expr_LE_expr            (val_peek(2).obj,val_peek(1).obj,val_peek(0).obj   ); }
 break;
 case 46:
-//#line 138 "Parser.y"
+//#line 134 "Parser.y"
 { Debug("expr -> expr LT expr"                  ); yyval.obj = expr____expr_LT_expr            (val_peek(2).obj,val_peek(1).obj,val_peek(0).obj   ); }
 break;
 case 47:
-//#line 139 "Parser.y"
+//#line 135 "Parser.y"
 { Debug("expr -> expr GE expr"                  ); yyval.obj = expr____expr_GE_expr            (val_peek(2).obj,val_peek(1).obj,val_peek(0).obj   ); }
 break;
 case 48:
-//#line 140 "Parser.y"
+//#line 136 "Parser.y"
 { Debug("expr -> expr GT expr"                  ); yyval.obj = expr____expr_GT_expr            (val_peek(2).obj,val_peek(1).obj,val_peek(0).obj   ); }
 break;
 case 49:
-//#line 141 "Parser.y"
+//#line 137 "Parser.y"
 { Debug("expr -> expr AND expr"                 ); yyval.obj = expr____expr_AND_expr           (val_peek(2).obj,val_peek(1).obj,val_peek(0).obj   ); }
 break;
 case 50:
-//#line 142 "Parser.y"
+//#line 138 "Parser.y"
 { Debug("expr -> expr OR expr"                  ); yyval.obj = expr____expr_OR_expr            (val_peek(2).obj,val_peek(1).obj,val_peek(0).obj   ); }
 break;
 case 51:
-//#line 143 "Parser.y"
+//#line 139 "Parser.y"
 { Debug("expr -> NOT expr"                      ); yyval.obj = expr____NOT_expr                (val_peek(1).obj,val_peek(0).obj      ); }
 break;
 case 52:
-//#line 144 "Parser.y"
+//#line 140 "Parser.y"
 { Debug("expr -> ( expr )"                      ); yyval.obj = expr____LPAREN_expr_RPAREN      (val_peek(2).obj,val_peek(1).obj,val_peek(0).obj   ); }
 break;
 case 53:
-//#line 145 "Parser.y"
+//#line 141 "Parser.y"
 { Debug("expr -> IDENT"                         ); yyval.obj = expr____IDENT                   (val_peek(0).obj         ); }
 break;
 case 54:
-//#line 146 "Parser.y"
+//#line 142 "Parser.y"
 { Debug("expr -> NUM_LIT"                       ); yyval.obj = expr____NUMLIT                  (val_peek(0).obj         ); }
 break;
 case 55:
-//#line 147 "Parser.y"
+//#line 143 "Parser.y"
 { Debug("expr -> BOOL_LIT"                      ); yyval.obj = expr____BOOLLIT                 (val_peek(0).obj         ); }
 break;
 case 56:
-//#line 148 "Parser.y"
+//#line 144 "Parser.y"
 { Debug("expr -> IDENT ( args )"                ); yyval.obj = expr____IDENT_LPAREN_args_RPAREN(val_peek(3).obj,val_peek(2).obj,val_peek(1).obj,val_peek(0).obj); }
 break;
 case 57:
-//#line 149 "Parser.y"
+//#line 145 "Parser.y"
 { Debug("expr -> NEW prim_type [ expr ]"        ); yyval.obj = expr____NEW_primtype_LBRACKET_expr_RBRACKET    (val_peek(4).obj,val_peek(3).obj,val_peek(2).obj,val_peek(1).obj,val_peek(0).obj); }
 break;
 case 58:
-//#line 150 "Parser.y"
+//#line 146 "Parser.y"
 { Debug("expr -> IDENT [ expr ]"                ); yyval.obj = expr____IDENT_LBRACKET_expr_RBRACKET   (val_peek(3).obj,val_peek(2).obj,val_peek(1).obj,val_peek(0).obj); }
 break;
 case 59:
-//#line 151 "Parser.y"
+//#line 147 "Parser.y"
 { Debug("expr -> IDENT DOT SIZE"                ); yyval.obj = expr____IDENT_DOT_SIZE          (val_peek(2).obj,val_peek(1).obj,val_peek(0).obj   ); }
 break;
 //#line 831 "Parser.java"

@@ -41,7 +41,8 @@ public class ParserImpl
     }
     Object decl____funcdecl(Object s1) throws Exception
     {
-        return s1;
+        ParseTree.FuncDecl funcdecl = (ParseTree.FuncDecl)s1;
+        return funcdecl;
     }
     Object primtype____NUM(Object s1) throws Exception
     {
@@ -292,23 +293,25 @@ public class ParserImpl
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    Object args____arg_list(Object s1) {
-        return s1;
+    Object args____arg_list(Object s1) throws Exception
+    {
+        ArrayList<ParseTree.Arg> arglist = (ArrayList<ParseTree.Arg>)s1;
+        return arglist;
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     Object arg_list____arg_list_COMMA_expr(Object s1, Object s2, Object s3) {
-        ArrayList<ParseTree.Expr> argList = (ArrayList<ParseTree.Expr>) s1;
+        ArrayList<ParseTree.Arg> argList = (ArrayList<ParseTree.Arg>) s1;
         ParseTree.Expr expr = (ParseTree.Expr) s3;
-        argList.add(expr);
+        argList.add(new ParseTree.Arg(expr));
         return argList;
     }
 
-    Object arg_list____expr(Object s1) {
-        ArrayList<ParseTree.Expr> argList = new ArrayList<>();
-        argList.add((ParseTree.Expr) s1);
-        return argList;
+    Object arg_list____expr(Object s1) throws Exception {
+        ArrayList<ParseTree.Arg> arglist = new ArrayList<ParseTree.Arg>();
+        arglist.add(new ParseTree.Arg((ParseTree.Expr)s1));
+        return arglist;
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -505,7 +508,7 @@ public class ParserImpl
     Object expr____IDENT_DOT_SIZE(Object s1, Object s2, Object s3) throws Exception
     {
         Token id = (Token)s1;
-        ParseTree.ExprIdent expr = new ParseTree.ExprIdent(id.lexeme);
+        ParseTree.ExprArraySize expr = new ParseTree.ExprArraySize(id.lexeme);
         expr.reladdr = 1;
         return expr;
     }
