@@ -146,7 +146,7 @@ public class ParserImpl
         return paramList;
     }
 
-     Object param____IDENT_TYPEOF_typespec(Object s1, Object s2, Object s3) throws Exception
+    Object param____IDENT_TYPEOF_typespec(Object s1, Object s2, Object s3) throws Exception
     {
         Token id = (Token) s1;
         ParseTree.TypeSpec typespec = (ParseTree.TypeSpec)s3;
@@ -276,7 +276,7 @@ public class ParserImpl
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    Object while_stmt____WHILE_expr_BEGIN_stmt_list_END(Object s1, Object s2, Object s3, Object s4) {
+    Object while_stmt____WHILE_expr_BEGIN_stmt_list_END(Object s1, Object s2, Object s3, Object s4, Object s5) {
         ParseTree.Expr expr = (ParseTree.Expr) s2;
         ArrayList<ParseTree.Stmt> stmtList = (ArrayList<ParseTree.Stmt>) s4;
         return new ParseTree.WhileStmt(expr, stmtList);
@@ -457,14 +457,14 @@ public class ParserImpl
         // check if expr1.type matches with expr2.type
         return new ParseTree.ExprOr(expr1,expr2);
     }
-    Object expr____expr_NOT_expr(Object s1, Object s2, Object s3) throws Exception
+    Object expr____NOT_expr(Object s1, Object s2) throws Exception
     {
         // 1. check if expr1.value_type matches with the expr2.value_type
         // 2. etc.
         // 3. create and return node that has value_type
-        ParseTree.Expr expr = (ParseTree.Expr)s1;
-        Token          oper  = (Token         )s2;
-        ParseTree.Expr result = new ParseTree.ExprNot(expr);
+        Token          oper  = (Token         )s1;
+        ParseTree.Expr expr = (ParseTree.Expr)s2;
+        ParseTree.ExprNot result = new ParseTree.ExprNot(expr);
         return result;
     }
     Object expr____LPAREN_expr_RPAREN(Object s1, Object s2, Object s3) throws Exception

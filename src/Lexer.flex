@@ -1,3 +1,4 @@
+
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * Copyright (C) 2000 Gerwin Klein <lsf@jflex.de>                          *
  * All rights reserved.                                                    *
