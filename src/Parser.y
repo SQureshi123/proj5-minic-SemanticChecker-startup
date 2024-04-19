@@ -55,7 +55,7 @@ decl            : func_decl                                     { Debug("decl ->
                 ;
 
 func_decl       : FUNC IDENT TYPEOF type_spec LPAREN params RPAREN BEGIN local_decls{ Debug("func_decl -> func ID::type_spec(params) begin local_decls"); $<obj>$ = fundecl____FUNC_IDENT_TYPEOF_typespec_LPAREN_params_RPAREN_BEGIN_localdecls_10X_stmtlist_END($1,$2,$3,$4,$5,$6,$7,$8,$9            ); }
-                                                                       stmt_list END{ Debug("                                            stmt_list end"); $$ =      fundecl____FUNC_IDENT_TYPEOF_typespec_LPAREN_params_RPAREN_BEGIN_localdecls_X10_stmtlist_END($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12); }
+                                                                       stmt_list END{ Debug("stmt_list end"); $$ =      fundecl____FUNC_IDENT_TYPEOF_typespec_LPAREN_params_RPAREN_BEGIN_localdecls_X10_stmtlist_END($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12); }
                 ;
 
 params          : param_list                                    { Debug("params -> param_list"                  ); $$ = params____paramlist($1); }
@@ -166,7 +166,7 @@ expr            : expr ADD expr                                 { Debug("expr ->
 
 
     public void yyerror (String error) {
-        //System.out.println ("Error message for " + lexer.lineno+":"+lexer.column +" by Parser.yyerror(): " + error);
+        System.out.println ("Error message for " + lexer.lineno+":"+lexer.column +" by Parser.yyerror(): " + error);
         int last_token_lineno = 0;
         int last_token_column = 0;
         System.out.println ("Error message by Parser.yyerror() at near " + last_token_lineno+":"+last_token_column + ": " + error);

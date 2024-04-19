@@ -325,8 +325,12 @@ public class ParserImpl
         Token          oper  = (Token         )s2;
         ParseTree.Expr expr2 = (ParseTree.Expr)s3;
         // check if expr1.type matches with expr2.type
-        ParseTree.ExprAdd result = new ParseTree.ExprAdd(expr1, expr2);
-        return result;
+
+        if (!expr1.info.type.equals(expr2.info.type)) {
+            throw new Exception("[Error at :] Binary operation + cannot be used with " + expr1.info.type + " and " + expr2.info.type + " values.");
+        }
+
+        return new ParseTree.ExprAdd(expr1,expr2);
     }
     Object expr____expr_SUB_expr(Object s1, Object s2, Object s3) throws Exception
     {
@@ -337,6 +341,11 @@ public class ParserImpl
         Token          oper  = (Token         )s2;
         ParseTree.Expr expr2 = (ParseTree.Expr)s3;
         // check if expr1.type matches with expr2.type
+
+        if (!expr1.info.type.equals(expr2.info.type)) {
+            throw new Exception("[Error at :] Binary operation - cannot be used with " + expr1.info.type + " and " + expr2.info.type + " values.");
+        }
+
         return new ParseTree.ExprSub(expr1,expr2);
     }
     Object expr____expr_MUL_expr(Object s1, Object s2, Object s3) throws Exception
@@ -348,6 +357,11 @@ public class ParserImpl
         Token          oper  = (Token         )s2;
         ParseTree.Expr expr2 = (ParseTree.Expr)s3;
         // check if expr1.type matches with expr2.type
+
+        if (!expr1.info.type.equals(expr2.info.type)) {
+            throw new Exception("[Error at :] Binary operation * cannot be used with " + expr1.info.type + " and " + expr2.info.type + " values.");
+        }
+
         return new ParseTree.ExprMul(expr1,expr2);
     }
     Object expr____expr_DIV_expr(Object s1, Object s2, Object s3) throws Exception
@@ -359,6 +373,11 @@ public class ParserImpl
         Token          oper  = (Token         )s2;
         ParseTree.Expr expr2 = (ParseTree.Expr)s3;
         // check if expr1.type matches with expr2.type
+
+        if (!expr1.info.type.equals(expr2.info.type)) {
+            throw new Exception("[Error at :] Binary operation / cannot be used with " + expr1.info.type + " and " + expr2.info.type + " values.");
+        }
+
         return new ParseTree.ExprDiv(expr1,expr2);
     }
     Object expr____expr_MOD_expr(Object s1, Object s2, Object s3) throws Exception
@@ -370,6 +389,11 @@ public class ParserImpl
         Token          oper  = (Token         )s2;
         ParseTree.Expr expr2 = (ParseTree.Expr)s3;
         // check if expr1.type matches with expr2.type
+
+        if (!expr1.info.type.equals(expr2.info.type)) {
+            throw new Exception("[Error at :] Binary operation % cannot be used with " + expr1.info.type + " and " + expr2.info.type + " values.");
+        }
+
         return new ParseTree.ExprMod(expr1,expr2);
     }
     Object expr____expr_EQ_expr(Object s1, Object s2, Object s3) throws Exception
@@ -381,6 +405,11 @@ public class ParserImpl
         Token          oper  = (Token         )s2;
         ParseTree.Expr expr2 = (ParseTree.Expr)s3;
         // check if expr1.type matches with expr2.type
+
+        if (!expr1.info.type.equals(expr2.info.type)) {
+            throw new Exception("[Error at :] Binary operation = cannot be used with " + expr1.info.type + " and " + expr2.info.type + " values.");
+        }
+
         return new ParseTree.ExprEq(expr1,expr2);
     }
     Object expr____expr_NE_expr(Object s1, Object s2, Object s3) throws Exception
@@ -392,6 +421,12 @@ public class ParserImpl
         Token          oper  = (Token         )s2;
         ParseTree.Expr expr2 = (ParseTree.Expr)s3;
         // check if expr1.type matches with expr2.type
+
+        //NEED TO WORK ON THIS CASE
+        if (!expr1.info.type.equals(expr2.info.type)) {
+            throw new Exception("[Error at :] Binary operation <> cannot be used with " + expr1.info.type + " and " + expr2.info.type + " values.");
+        }
+
         return new ParseTree.ExprNe(expr1,expr2);
     }
     Object expr____expr_LE_expr(Object s1, Object s2, Object s3) throws Exception
@@ -403,6 +438,13 @@ public class ParserImpl
         Token          oper  = (Token         )s2;
         ParseTree.Expr expr2 = (ParseTree.Expr)s3;
         // check if expr1.type matches with expr2.type
+
+        if (expr1.info.type.equals("bool") && expr2.info.type.equals("bool")) {
+            throw new Exception("[Error at :] Binary operation <= cannot be used with " + expr1.info.type + " and " + expr2.info.type + " values.");
+        } else if (!expr1.info.type.equals(expr2.info.type)) {
+            throw new Exception("[Error at :] Binary operation <= cannot be used with " + expr1.info.type + " and " + expr2.info.type + " values.");
+        }
+
         return new ParseTree.ExprLe(expr1,expr2);
     }
     Object expr____expr_LT_expr(Object s1, Object s2, Object s3) throws Exception
@@ -414,6 +456,13 @@ public class ParserImpl
         Token          oper  = (Token         )s2;
         ParseTree.Expr expr2 = (ParseTree.Expr)s3;
         // check if expr1.type matches with expr2.type
+
+        if (expr1.info.type.equals("bool") && expr2.info.type.equals("bool")) {
+            throw new Exception("[Error at :] Binary operation < cannot be used with " + expr1.info.type + " and " + expr2.info.type + " values.");
+        } else if (!expr1.info.type.equals(expr2.info.type)) {
+            throw new Exception("[Error at :] Binary operation < cannot be used with " + expr1.info.type + " and " + expr2.info.type + " values.");
+        }
+
         return new ParseTree.ExprLt(expr1,expr2);
     }
     Object expr____expr_GE_expr(Object s1, Object s2, Object s3) throws Exception
@@ -425,6 +474,13 @@ public class ParserImpl
         Token          oper  = (Token         )s2;
         ParseTree.Expr expr2 = (ParseTree.Expr)s3;
         // check if expr1.type matches with expr2.type
+
+        if (expr1.info.type.equals("bool") && expr2.info.type.equals("bool")) {
+            throw new Exception("[Error at :] Binary operation >= cannot be used with " + expr1.info.type + " and " + expr2.info.type + " values.");
+        } else if (!expr1.info.type.equals(expr2.info.type)) {
+            throw new Exception("[Error at :] Binary operation >= cannot be used with " + expr1.info.type + " and " + expr2.info.type + " values.");
+        }
+
         return new ParseTree.ExprGe(expr1,expr2);
     }
     Object expr____expr_GT_expr(Object s1, Object s2, Object s3) throws Exception
@@ -436,6 +492,13 @@ public class ParserImpl
         Token          oper  = (Token         )s2;
         ParseTree.Expr expr2 = (ParseTree.Expr)s3;
         // check if expr1.type matches with expr2.type
+
+        if (expr1.info.type.equals("bool") && expr2.info.type.equals("bool")) {
+            throw new Exception("[Error at :] Binary operation > cannot be used with " + expr1.info.type + " and " + expr2.info.type + " values.");
+        } else if (!expr1.info.type.equals(expr2.info.type)) {
+            throw new Exception("[Error at :] Binary operation > cannot be used with " + expr1.info.type + " and " + expr2.info.type + " values.");
+        }
+
         return new ParseTree.ExprGt(expr1,expr2);
     }
     Object expr____expr_AND_expr(Object s1, Object s2, Object s3) throws Exception
@@ -447,6 +510,11 @@ public class ParserImpl
         Token          oper  = (Token         )s2;
         ParseTree.Expr expr2 = (ParseTree.Expr)s3;
         // check if expr1.type matches with expr2.type
+
+        if (!expr1.info.type.equals(expr2.info.type)) {
+            throw new Exception("[Error at :] Binary operation and cannot be used with " + expr1.info.type + " and " + expr2.info.type + " values.");
+        }
+
         return new ParseTree.ExprAnd(expr1,expr2);
     }
     Object expr____expr_OR_expr(Object s1, Object s2, Object s3) throws Exception
@@ -458,6 +526,11 @@ public class ParserImpl
         Token          oper  = (Token         )s2;
         ParseTree.Expr expr2 = (ParseTree.Expr)s3;
         // check if expr1.type matches with expr2.type
+
+        if (!expr1.info.type.equals(expr2.info.type)) {
+            throw new Exception("[Error at :] Binary operation or cannot be used with " + expr1.info.type + " and " + expr2.info.type + " values.");
+        }
+
         return new ParseTree.ExprOr(expr1,expr2);
     }
     Object expr____NOT_expr(Object s1, Object s2) throws Exception
@@ -467,8 +540,12 @@ public class ParserImpl
         // 3. create and return node that has value_type
         Token          oper  = (Token         )s1;
         ParseTree.Expr expr = (ParseTree.Expr)s2;
-        ParseTree.ExprNot result = new ParseTree.ExprNot(expr);
-        return result;
+
+        if (expr.info.type.equals("num")) {
+            throw new Exception("[Error at :] Unary operation not cannot be used with " + expr.info.type + " value.");
+        }
+
+        return new ParseTree.ExprNot(expr);
     }
     Object expr____LPAREN_expr_RPAREN(Object s1, Object s2, Object s3) throws Exception
     {
@@ -528,6 +605,12 @@ public class ParserImpl
         Token token = (Token)s1;
         double value = Double.parseDouble(token.lexeme);
         ParseTree.ExprNumLit result = new ParseTree.ExprNumLit(value);
+
+        result.info.type = "num";
+
+        result.info.lineno = 0;
+        result.info.column = 0;
+
         return result;
     }
     Object expr____BOOLLIT(Object s1) throws Exception
@@ -535,6 +618,10 @@ public class ParserImpl
         // 1. create and return node that has int type
         Token token = (Token)s1;
         boolean value = Boolean.parseBoolean(token.lexeme);
-        return new ParseTree.ExprBoolLit(value);
+        ParseTree.ExprBoolLit result = new ParseTree.ExprBoolLit(value);
+
+        result.info.type = "bool";
+
+        return result;
     }
 }

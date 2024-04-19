@@ -53,5 +53,14 @@ public class ParseTreeInfo
     }
     public static class ExprInfo
     {
+        public int lineno;
+        public int column;
+        public String type;
+
+        public ExprInfo() {
+            this.lineno = -1;
+            this.column = -1;
+            this.type = "";
+        }
     }
 }
