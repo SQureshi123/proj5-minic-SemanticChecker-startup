@@ -8,7 +8,7 @@
  * Thanks to Larry Bell and Bob Jamison for suggestions and comments.      *
  *                                                                         *
  * License: BSD                                                            *
- *                                                                         *
+ *  Group Members: Shiza Qureshi & Tyler Page                                                                       *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 %{
