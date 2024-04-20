@@ -32,24 +32,98 @@ public class ParseTreeInfo
     // You should not modify ParseTree.java
     public static class TypeSpecInfo
     {
+        public int lineno;
+        public int column;
+        public String type;
+
+        public TypeSpecInfo() {
+            this.lineno = -1;
+            this.column = -1;
+            this.type = "";
+        }
     }
     public static class ProgramInfo
     {
+        public int lineno;
+        public int column;
+        public String type;
+
+        public ProgramInfo() {
+            this.lineno = -1;
+            this.column = -1;
+            this.type = "";
+        }
     }
     public static class FuncDeclInfo
     {
+        public int lineno;
+        public int column;
+        public String type;
+
+        public FuncDeclInfo() {
+            this.lineno = -1;
+            this.column = -1;
+            this.type = "";
+        }
     }
     public static class ParamInfo
     {
+        public int lineno;
+        public int column;
+        public String type;
+
+        public ParamInfo() {
+            this.lineno = -1;
+            this.column = -1;
+            this.type = "";
+        }
     }
     public static class LocalDeclInfo
     {
+        public int lineno;
+        public int column;
+        public String type;
+
+        public LocalDeclInfo() {
+            this.lineno = -1;
+            this.column = -1;
+            this.type = "";
+        }
     }
     public static class StmtStmtInfo
     {
+        public int lineno;
+        public int column;
+        public String type;
+
+        public StmtStmtInfo() {
+            this.lineno = -1;
+            this.column = -1;
+            this.type = "";
+        }
     }
     public static class ArgInfo
     {
+        private int lineno;
+        private int column;
+        private String valueType;
+
+       // public ArgInfo(int lineno, int column, String valueType){
+       //     this.lineno = lineno;
+       //     this.column = column;
+       //     this.valueType = valueType;
+
+       // }
+        public int getLineno(){
+            return lineno;
+        }
+        public int getColumn(){
+            return column;
+        }
+        public String getValueType(){
+            return valueType;
+        }
+
     }
     public static class ExprInfo
     {
@@ -63,4 +137,7 @@ public class ParseTreeInfo
             this.type = "";
         }
     }
+
+
+
 }

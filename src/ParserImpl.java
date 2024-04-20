@@ -596,7 +596,7 @@ public class ParserImpl
         ParseTree.ExprNewArray result = new ParseTree.ExprNewArray(primType, expr);
         return result;
 
-        //FIX IT!!!
+
 
     }
     Object expr____NUMLIT(Object s1) throws Exception
@@ -607,9 +607,6 @@ public class ParserImpl
         ParseTree.ExprNumLit result = new ParseTree.ExprNumLit(value);
 
         result.info.type = "num";
-
-        result.info.lineno = 0;
-        result.info.column = 0;
 
         return result;
     }
