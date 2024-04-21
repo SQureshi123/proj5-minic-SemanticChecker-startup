@@ -35,9 +35,11 @@ public class ParseTreeInfo
         private String type;
         private int lineno;
         private int column;
+        private String value;
 
         public TypeSpecInfo() {
             this.type = "";
+            this.value = "";
             this.lineno = 1;
             this.column = 1;
         }
@@ -48,6 +50,14 @@ public class ParseTreeInfo
 
         public void setType(String type) {
             this.type = type;
+        }
+
+        public String getValue() {
+            return value;
+        }
+
+        public void setValue(String value) {
+            this.value = value;
         }
 
         public int getLineno() {
@@ -71,11 +81,13 @@ public class ParseTreeInfo
         private int lineno;
         private int column;
         private ArrayList<ParseTree.Node> children;
+        private String value;
 
         public ProgramInfo() {
             this.lineno = 1;
             this.column = 1;
             this.children = new ArrayList<>();
+            this.value = "";
         }
 
         public int getLineno() {
@@ -100,6 +112,14 @@ public class ParseTreeInfo
 
         public void setChildren(ArrayList<ParseTree.Node> children) {
             this.children = children;
+        }
+
+        public String getValue() {
+            return value;
+        }
+
+        public void setValue(String value) {
+            this.value = value;
         }
     }
     public static class FuncDeclInfo
@@ -162,12 +182,14 @@ public class ParseTreeInfo
     {
         private String type;
         private String name;
+        private String value;
         private int lineno;
         private int column;
 
         public ParamInfo() {
             this.type = "";
             this.name = "";
+            this.value = "";
             this.lineno = 1;
             this.column = 1;
         }
@@ -186,6 +208,14 @@ public class ParseTreeInfo
 
         public void setName(String name) {
             this.name = name;
+        }
+
+        public String getValue() {
+            return value;
+        }
+
+        public void setValue(String value) {
+            this.value = value;
         }
 
         public int getLineno() {
@@ -255,11 +285,13 @@ public class ParseTreeInfo
         private int lineno;
         private int column;
         private ArrayList<ParseTree.Node> children;
+        private String value;
 
         public StmtStmtInfo() {
             this.lineno = 1;
             this.column = 1;
             this.children = new ArrayList<>();
+            this.value = "";
         }
 
         public int getLineno() {
@@ -284,6 +316,14 @@ public class ParseTreeInfo
 
         public void setChildren(ArrayList<ParseTree.Node> children) {
             this.children = children;
+        }
+
+        public String getValue() {
+            return value;
+        }
+
+        public void setValue(String value) {
+            this.value = value;
         }
     }
     public static class ArgInfo
@@ -291,11 +331,13 @@ public class ParseTreeInfo
         private int lineno;
         private int column;
         private ArrayList<ParseTree.Node> children;
+        private String value;
 
         public ArgInfo() {
             this.lineno = 1;
             this.column = 1;
             this.children = new ArrayList<>();
+            this.value = "";
         }
 
         public int getLineno() {
@@ -321,15 +363,25 @@ public class ParseTreeInfo
         public void setChildren(ArrayList<ParseTree.Node> children) {
             this.children = children;
         }
+
+        public String getValue() {
+            return value;
+        }
+
+        public void setValue(String value) {
+            this.value = value;
+        }
     }
     public static class ExprInfo {
         private String type;
+        private Object value;
         private int lineno;
         private int column;
         private ArrayList<ParseTree.Node> children;
 
         public ExprInfo() {
             this.type = "";
+            this.value = "";
             this.lineno = 1;
             this.column = 1;
             this.children = new ArrayList<>();
@@ -341,6 +393,14 @@ public class ParseTreeInfo
 
         public void setType(String type) {
             this.type = type;
+        }
+
+        public Object getValue() {
+            return value;
+        }
+
+        public void setValue(Object value) {
+            this.value = value;
         }
 
         public int getLineno() {
