@@ -212,18 +212,58 @@ public class ParserImpl
 
     Object assignstmt____IDENT_ASSIGN_expr_SEMI(Object s1, Object s2, Object s3, Object s4) throws Exception
     {
-        Token id = (Token) s1;
-        ParseTree.Expr expr = (ParseTree.Expr) s3;
-        ParseTree.AssignStmt assignStmt = new ParseTree.AssignStmt(id.lexeme, expr);
-        assignStmt.ident_reladdr = 1;
-        return assignStmt;
+        Token id = (Token)s1;
+        ParseTree.Expr expr = (ParseTree.Expr)s3;
+        ParseTree.AssignStmt assignstmt = new ParseTree.AssignStmt(id.lexeme, expr);
+        assignstmt.ident_reladdr = 1;
+
+        // Check if the left-hand side identifier is defined
+        Object typeInfo = env.Get(id.lexeme);
+        if(typeInfo == null) {
+            throw new Exception("[Error at :] Variable " + id.lexeme + " is not defined.");
+        }
+
+        // Check if any identifier within the expr is defined
+        if (expr instanceof ParseTree.ExprIdent) {
+            ParseTree.ExprIdent exprIdent = (ParseTree.ExprIdent) expr;
+            if (env.Get(exprIdent.ident) == null) {
+                throw new Exception("[Error at :] Variable " + exprIdent.ident + " is not defined.");
+            }
+        }
+        Object exprValue = null;
+        if (expr instanceof ParseTree.ExprNumLit) {
+            exprValue = ((ParseTree.ExprNumLit) expr).val;
+        } else if (expr instanceof ParseTree.ExprBoolLit) {
+            exprValue = ((ParseTree.ExprBoolLit) expr).val;
+        }
+
+        String type = String.valueOf(expr.info.getType());
+
+        if (type.equals("bool") && typeInfo .equals("num"))
+        {
+            throw new Exception("[Error at :] Variable " + id.lexeme + " should have " + typeInfo + " value, instead of " + type + " value.");
+        }
+
+        env.Put(id.lexeme, exprValue);
+        return assignstmt;
     }
+
 
     Object assignstmt____IDENT_LBRACKET_expr_RBRACKET_ASSIGN_expr_SEMI(Object s1, Object s2, Object s3, Object s4, Object s5, Object s6, Object s7) throws Exception
     {
         Token id = (Token)s1;
         ParseTree.Expr expr1 = (ParseTree.Expr)s3;
         ParseTree.Expr expr2 = (ParseTree.Expr)s6;
+
+        Object varInfo = env.Get(id.lexeme);
+        if (varInfo == null) {
+            throw new Exception("Not defined");
+        }
+
+        if (!(varInfo instanceof ParseTree.TypeSpec)) {
+            throw new Exception("Type Mismatch");
+        }
+
         ParseTree.AssignStmtForArray assignstmtArr = new ParseTree.AssignStmtForArray(id.lexeme, expr1, expr2);
         assignstmtArr.ident_reladdr = 1;
         return assignstmtArr;
@@ -252,12 +292,22 @@ public class ParserImpl
     {
         return new ArrayList<ParseTree.LocalDecl>();
     }
-    Object localdecl____VAR_IDENT_TYPEOF_typespec_SEMI(Object s1, Object s2, Object s3, Object s4, Object s5)
+    Object localdecl____VAR_IDENT_TYPEOF_typespec_SEMI(Object s1, Object s2, Object s3, Object s4, Object s5) throws Exception
     {
         Token              id       = (Token             )s2;
         ParseTree.TypeSpec typespec = (ParseTree.TypeSpec)s4;
+
         ParseTree.LocalDecl localdecl = new ParseTree.LocalDecl(id.lexeme, typespec);
         localdecl.reladdr = 1;
+
+        if (env.Get(id.lexeme) != null) {
+            throw new Exception("[Error at :] Identifier " + id.lexeme + " is already defined.");
+        }
+
+        typespec.info.setType(id.lexeme);
+
+        env.Put(id.lexeme, typespec.typename);
+
         return localdecl;
     }
 
@@ -330,7 +380,11 @@ public class ParserImpl
             throw new Exception("[Error at :] Binary operation + cannot be used with " + expr1.info.type + " and " + expr2.info.type + " values.");
         }
 
-        return new ParseTree.ExprAdd(expr1,expr2);
+        ParseTree.ExprAdd result = new ParseTree.ExprAdd(expr1, expr2);
+
+        result.info = expr1.info;
+
+        return result;
     }
     Object expr____expr_SUB_expr(Object s1, Object s2, Object s3) throws Exception
     {
@@ -346,7 +400,11 @@ public class ParserImpl
             throw new Exception("[Error at :] Binary operation - cannot be used with " + expr1.info.type + " and " + expr2.info.type + " values.");
         }
 
-        return new ParseTree.ExprSub(expr1,expr2);
+        ParseTree.ExprSub result = new ParseTree.ExprSub(expr1, expr2);
+
+        result.info = expr1.info;
+
+        return result;
     }
     Object expr____expr_MUL_expr(Object s1, Object s2, Object s3) throws Exception
     {
@@ -356,13 +414,18 @@ public class ParserImpl
         ParseTree.Expr expr1 = (ParseTree.Expr)s1;
         Token          oper  = (Token         )s2;
         ParseTree.Expr expr2 = (ParseTree.Expr)s3;
+
         // check if expr1.type matches with expr2.type
 
         if (!expr1.info.type.equals(expr2.info.type)) {
             throw new Exception("[Error at :] Binary operation * cannot be used with " + expr1.info.type + " and " + expr2.info.type + " values.");
         }
 
-        return new ParseTree.ExprMul(expr1,expr2);
+        ParseTree.ExprMul result = new ParseTree.ExprMul(expr1, expr2);
+
+        result.info = expr1.info;
+
+        return result;
     }
     Object expr____expr_DIV_expr(Object s1, Object s2, Object s3) throws Exception
     {
@@ -374,11 +437,20 @@ public class ParserImpl
         ParseTree.Expr expr2 = (ParseTree.Expr)s3;
         // check if expr1.type matches with expr2.type
 
-        if (!expr1.info.type.equals(expr2.info.type)) {
-            throw new Exception("[Error at :] Binary operation / cannot be used with " + expr1.info.type + " and " + expr2.info.type + " values.");
+        String type1 = String.valueOf(expr1 instanceof ParseTree.ExprNumLit);
+        String type2 = String.valueOf(expr2 instanceof ParseTree.ExprNumLit);
+
+        System.out.println("Type1: " + type1 + " Type2: " + type2);
+
+        if (type1.equals("true") || type2.equals("true")) {
+            throw new Exception("[Error at :] Binary operation / cannot be used with " + expr1.info.getType() + " and " + expr2.info.getType() + " values.");
         }
 
-        return new ParseTree.ExprDiv(expr1,expr2);
+        ParseTree.ExprDiv result = new ParseTree.ExprDiv(expr1, expr2);
+
+        result.info = expr1.info;
+
+        return result;
     }
     Object expr____expr_MOD_expr(Object s1, Object s2, Object s3) throws Exception
     {
@@ -394,7 +466,11 @@ public class ParserImpl
             throw new Exception("[Error at :] Binary operation % cannot be used with " + expr1.info.type + " and " + expr2.info.type + " values.");
         }
 
-        return new ParseTree.ExprMod(expr1,expr2);
+        ParseTree.ExprMod result = new ParseTree.ExprMod(expr1, expr2);
+
+        result.info = expr1.info;
+
+        return result;
     }
     Object expr____expr_EQ_expr(Object s1, Object s2, Object s3) throws Exception
     {
@@ -410,7 +486,11 @@ public class ParserImpl
             throw new Exception("[Error at :] Binary operation = cannot be used with " + expr1.info.type + " and " + expr2.info.type + " values.");
         }
 
-        return new ParseTree.ExprEq(expr1,expr2);
+        ParseTree.ExprEq result = new ParseTree.ExprEq(expr1, expr2);
+
+        result.info = expr1.info;
+
+        return result;
     }
     Object expr____expr_NE_expr(Object s1, Object s2, Object s3) throws Exception
     {
@@ -541,11 +621,19 @@ public class ParserImpl
         Token          oper  = (Token         )s1;
         ParseTree.Expr expr = (ParseTree.Expr)s2;
 
-        if (expr.info.type.equals("num")) {
+        String type = String.valueOf(expr instanceof ParseTree.Expr);
+        env.Put(oper.lexeme, "not");
+        Object operandType = env.Get(oper.lexeme);
+
+        if ((operandType.equals("not")) && (expr instanceof ParseTree.ExprNumLit)) {
             throw new Exception("[Error at :] Unary operation not cannot be used with " + expr.info.type + " value.");
         }
-
-        return new ParseTree.ExprNot(expr);
+        if (type.equals("true") || type.equals("false")) {
+            type = "bool";
+        }
+        ParseTree.ExprNot result = new ParseTree.ExprNot(expr);
+        result.info.setType(type);
+        return result;
     }
     Object expr____LPAREN_expr_RPAREN(Object s1, Object s2, Object s3) throws Exception
     {
@@ -553,7 +641,12 @@ public class ParserImpl
         Token          lparen = (Token         )s1;
         ParseTree.Expr expr   = (ParseTree.Expr)s2;
         Token          rparen = (Token         )s3;
-        return new ParseTree.ExprParen(expr);
+
+        ParseTree.ExprParen exprParen = new ParseTree.ExprParen(expr);
+
+        exprParen.info = expr.info;
+
+        return exprParen;
     }
     Object expr____IDENT(Object s1) throws Exception
     {

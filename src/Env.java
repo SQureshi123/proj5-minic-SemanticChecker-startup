@@ -18,6 +18,7 @@ public class Env
     {
         Object value = symbols.get(name);
         if (value != null) {
+            //System.out.println("ENV VALUE: " + value);
             return value;
         } else if (prev != null) {
             return prev.Get(name);

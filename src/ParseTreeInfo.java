@@ -41,6 +41,30 @@ public class ParseTreeInfo
             this.column = -1;
             this.type = "";
         }
+
+        public String getType() {
+            return type;
+        }
+
+        public void setType(String type) {
+            this.type = type;
+        }
+
+        public int getLineno() {
+            return lineno;
+        }
+
+        public void setLineno(int lineno) {
+            this.lineno = lineno;
+        }
+
+        public int getColumn() {
+            return column;
+        }
+
+        public void setColumn(int column) {
+            this.column = column;
+        }
     }
     public static class ProgramInfo
     {
@@ -135,6 +159,30 @@ public class ParseTreeInfo
             this.lineno = -1;
             this.column = -1;
             this.type = "";
+        }
+
+        public String getType() {
+            return type;
+        }
+
+        public void setType(String type) {
+            this.type = type;
+        }
+
+        public int getLineno() {
+            return lineno;
+        }
+
+        public void setLineno(int lineno) {
+            this.lineno = lineno;
+        }
+
+        public int getColumn() {
+            return column;
+        }
+
+        public void setColumn(int column) {
+            this.column = column;
         }
     }
 
