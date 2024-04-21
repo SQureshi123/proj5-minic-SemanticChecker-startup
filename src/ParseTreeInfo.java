@@ -32,14 +32,14 @@ public class ParseTreeInfo
     // You should not modify ParseTree.java
     public static class TypeSpecInfo
     {
-        public int lineno;
-        public int column;
-        public String type;
+        private String type;
+        private int lineno;
+        private int column;
 
         public TypeSpecInfo() {
-            this.lineno = -1;
-            this.column = -1;
             this.type = "";
+            this.lineno = 1;
+            this.column = 1;
         }
 
         public String getType() {
@@ -68,97 +68,271 @@ public class ParseTreeInfo
     }
     public static class ProgramInfo
     {
-        public int lineno;
-        public int column;
-        public String type;
+        private int lineno;
+        private int column;
+        private ArrayList<ParseTree.Node> children;
 
         public ProgramInfo() {
-            this.lineno = -1;
-            this.column = -1;
-            this.type = "";
+            this.lineno = 1;
+            this.column = 1;
+            this.children = new ArrayList<>();
+        }
+
+        public int getLineno() {
+            return lineno;
+        }
+
+        public void setLineno(int lineno) {
+            this.lineno = lineno;
+        }
+
+        public int getColumn() {
+            return column;
+        }
+
+        public void setColumn(int column) {
+            this.column = column;
+        }
+
+        public ArrayList<ParseTree.Node> getChildren() {
+            return children;
+        }
+
+        public void setChildren(ArrayList<ParseTree.Node> children) {
+            this.children = children;
         }
     }
     public static class FuncDeclInfo
     {
-        public int lineno;
-        public int column;
-        public String type;
+        private String type;
+        private String name;
+        private int lineno;
+        private int column;
+        private ArrayList<ParseTree.Node> children;
 
         public FuncDeclInfo() {
-            this.lineno = -1;
-            this.column = -1;
             this.type = "";
+            this.name = "";
+            this.lineno = 1;
+            this.column = 1;
+            this.children = new ArrayList<>();
+        }
+
+        public String getType() {
+            return type;
+        }
+
+        public void setType(String type) {
+            this.type = type;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public int getLineno() {
+            return lineno;
+        }
+
+        public void setLineno(int lineno) {
+            this.lineno = lineno;
+        }
+
+        public int getColumn() {
+            return column;
+        }
+
+        public void setColumn(int column) {
+            this.column = column;
+        }
+
+        public ArrayList<ParseTree.Node> getChildren() {
+            return children;
+        }
+
+        public void setChildren(ArrayList<ParseTree.Node> children) {
+            this.children = children;
         }
     }
     public static class ParamInfo
     {
-        public int lineno;
-        public int column;
-        public String type;
+        private String type;
+        private String name;
+        private int lineno;
+        private int column;
 
         public ParamInfo() {
-            this.lineno = -1;
-            this.column = -1;
             this.type = "";
+            this.name = "";
+            this.lineno = 1;
+            this.column = 1;
+        }
+
+        public String getType() {
+            return type;
+        }
+
+        public void setType(String type) {
+            this.type = type;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public int getLineno() {
+            return lineno;
+        }
+
+        public void setLineno(int lineno) {
+            this.lineno = lineno;
+        }
+
+        public int getColumn() {
+            return column;
+        }
+
+        public void setColumn(int column) {
+            this.column = column;
         }
     }
     public static class LocalDeclInfo
     {
-        public int lineno;
-        public int column;
-        public String type;
+        private String type;
+        private String name;
+        private int lineno;
+        private int column;
 
         public LocalDeclInfo() {
-            this.lineno = -1;
-            this.column = -1;
             this.type = "";
+            this.name = "";
+            this.lineno = 1;
+            this.column = 1;
+        }
+
+        public String getType() {
+            return type;
+        }
+
+        public void setType(String type) {
+            this.type = type;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public int getLineno() {
+            return lineno;
+        }
+
+        public void setLineno(int lineno) {
+            this.lineno = lineno;
+        }
+
+        public int getColumn() {
+            return column;
+        }
+
+        public void setColumn(int column) {
+            this.column = column;
         }
     }
     public static class StmtStmtInfo
     {
-        public int lineno;
-        public int column;
-        public String type;
+        private int lineno;
+        private int column;
+        private ArrayList<ParseTree.Node> children;
 
         public StmtStmtInfo() {
-            this.lineno = -1;
-            this.column = -1;
-            this.type = "";
+            this.lineno = 1;
+            this.column = 1;
+            this.children = new ArrayList<>();
+        }
+
+        public int getLineno() {
+            return lineno;
+        }
+
+        public void setLineno(int lineno) {
+            this.lineno = lineno;
+        }
+
+        public int getColumn() {
+            return column;
+        }
+
+        public void setColumn(int column) {
+            this.column = column;
+        }
+
+        public ArrayList<ParseTree.Node> getChildren() {
+            return children;
+        }
+
+        public void setChildren(ArrayList<ParseTree.Node> children) {
+            this.children = children;
         }
     }
     public static class ArgInfo
     {
         private int lineno;
         private int column;
-        private String valueType;
+        private ArrayList<ParseTree.Node> children;
 
-       // public ArgInfo(int lineno, int column, String valueType){
-       //     this.lineno = lineno;
-       //     this.column = column;
-       //     this.valueType = valueType;
+        public ArgInfo() {
+            this.lineno = 1;
+            this.column = 1;
+            this.children = new ArrayList<>();
+        }
 
-       // }
-        public int getLineno(){
+        public int getLineno() {
             return lineno;
         }
-        public int getColumn(){
+
+        public void setLineno(int lineno) {
+            this.lineno = lineno;
+        }
+
+        public int getColumn() {
             return column;
         }
-        public String getValueType(){
-            return valueType;
+
+        public void setColumn(int column) {
+            this.column = column;
         }
 
+        public ArrayList<ParseTree.Node> getChildren() {
+            return children;
+        }
+
+        public void setChildren(ArrayList<ParseTree.Node> children) {
+            this.children = children;
+        }
     }
-    public static class ExprInfo
-    {
-        public int lineno;
-        public int column;
-        public String type;
+    public static class ExprInfo {
+        private String type;
+        private int lineno;
+        private int column;
+        private ArrayList<ParseTree.Node> children;
 
         public ExprInfo() {
-            this.lineno = -1;
-            this.column = -1;
             this.type = "";
+            this.lineno = 1;
+            this.column = 1;
+            this.children = new ArrayList<>();
         }
 
         public String getType() {
@@ -184,8 +358,14 @@ public class ParseTreeInfo
         public void setColumn(int column) {
             this.column = column;
         }
+
+        public ArrayList<ParseTree.Node> getChildren() {
+            return children;
+        }
+
+        public void setChildren(ArrayList<ParseTree.Node> children) {
+            this.children = children;
+        }
     }
-
-
 
 }

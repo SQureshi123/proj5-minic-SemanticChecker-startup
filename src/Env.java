@@ -7,12 +7,13 @@ public class Env
     public Env prev;
     public Env(Env prev)
     {
+        this.symbols = new HashMap<>();
         this.prev = prev;
-        symbols = new HashMap<>();
     }
-    public void Put(String name, Object value)
+    public Object Put(String name, Object value)
     {
         symbols.put(name, value);
+        return value;
     }
     public Object Get(String name)
     {
