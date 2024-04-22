@@ -17,6 +17,21 @@ public class ParserImpl
     // this stores the root of parse tree, which will be used to print parse tree and run the parse tree
     ParseTree.Program parsetree_program = null;
 
+    public void enterBlock() {
+        Env newEnv = new Env(env);
+        env = newEnv;
+        System.out.println("Entered new block ---------------------------------------------------------------------------");
+    }
+
+    public void exitBlock() {
+        if (env.prev != null) {
+            env = env.prev;
+            System.out.println("Exited previous block");
+        } else {
+            System.out.println("No previous block");
+        }
+    }
+
     private void setTypeBasedOnVal(ParseTree.Expr expr) {
         if (expr instanceof ParseTree.ExprIdent) {
             ParseTree.ExprIdent exprIdent = (ParseTree.ExprIdent) expr;
@@ -108,31 +123,63 @@ public class ParserImpl
         // 4. etc.
         // 5. create and return funcdecl node
 
-        /*Token id = (Token) s2;
+        /*System.out.println("FUNDECL STATEMENT");
+
+        Token id = (Token) s2;
         ParseTree.TypeSpec returnType = (ParseTree.TypeSpec) s4;
         ArrayList<ParseTree.Param> params = (ArrayList<ParseTree.Param>) s6;
-        ArrayList<ParseTree.LocalDecl> localdecls = (ArrayList<ParseTree.LocalDecl>) s8;
-        ArrayList<ParseTree.Stmt> stmtList = (ArrayList<ParseTree.Stmt>) s9;
+        ArrayList<ParseTree.LocalDecl> localdecls = (ArrayList<ParseTree.LocalDecl>) s9;
+
+        enterBlock();
 
         HashMap<String, Object> funcInfo = new HashMap<>();
-        funcInfo.put("returnType",returnType);
-        funcInfo.put("parameters",params);
+        funcInfo.put("returnType", returnType.typename.toString());
+        funcInfo.put("parameters", params);
         env.Put(id.lexeme, funcInfo);
-
-        env = new Env(env);
+        System.out.println("Function declared: " + id.lexeme + " with return type: " + returnType.typename);
 
         for (ParseTree.Param param : params) {
-            env.Put(param.ident, param);
+            ParseTreeInfo.ParamInfo paramInfo = new ParseTreeInfo.ParamInfo();
+            paramInfo.setType(param.typespec.typename);
+            paramInfo.setName(param.ident);
+            env.Put(param.ident, paramInfo);
         }
 
-        ParseTree.FuncDecl funcdecl = new ParseTree.FuncDecl(id.lexeme, returnType, params, localdecls, stmtList);
-        return funcdecl;*/
+        for (ParseTree.LocalDecl localDecl : localdecls) {
+            localdecl____VAR_IDENT_TYPEOF_typespec_SEMI(null,new Token(localDecl.info.getName()),null,new ParseTree.TypeSpec(localDecl.info.getType()),null);
+        }*/
+
+        /*for (ParseTree.Stmt stmt : stmtList) {
+            if (stmt instanceof ParseTree.AssignStmt) {
+                System.out.println("Assign Stmt");
+                stmt____assignstmt(stmt);
+            } else if (stmt instanceof ParseTree.PrintStmt) {
+                System.out.println("Print Stmt");
+                stmt____printstmt(stmt);
+            } else if (stmt instanceof ParseTree.ReturnStmt) {
+                System.out.println("Return Stmt");
+                stmt____returnstmt(stmt);
+            } else if (stmt instanceof ParseTree.IfStmt) {
+                System.out.println("If Stmt");
+                System.out.println("If Stmt");
+                stmt____ifstmt(stmt);
+            } else if (stmt instanceof ParseTree.WhileStmt) {
+                System.out.println("While Stmt");
+                stmt____whilestmt(stmt);
+            } else if (stmt instanceof ParseTree.CompoundStmt) {
+                System.out.println("Compound Stmt");
+                stmt____compoundstmt(stmt);
+            }
+        }*/
+        /*exitBlock();
+        ParseTree.FuncDecl funcdecl = new ParseTree.FuncDecl(id.lexeme, returnType, params, localdecls, new ArrayList<ParseTree.Stmt>());*/
 
         return null;
     }
 
     Object fundecl____FUNC_IDENT_TYPEOF_typespec_LPAREN_params_RPAREN_BEGIN_localdecls_X10_stmtlist_END(Object s1, Object s2, Object s3, Object s4, Object s5, Object s6, Object s7, Object s8, Object s9, Object s10, Object s11, Object s12) throws Exception
     {
+        System.out.println("FUNDECL2 STATEMENT");
         // 1. check if this function has at least one return type
         // 2. etc.
         // 3. create and return funcdecl node
@@ -247,29 +294,23 @@ public class ParserImpl
         ParseTree.AssignStmt assignstmt = new ParseTree.AssignStmt(id.lexeme, expr);
         assignstmt.ident_reladdr = 1;
 
-        // Check if the variable is defined in the environment
         Object typeInfo = env.Get(id.lexeme);
         if (typeInfo == null) {
-            System.out.println("Debug: Variable " + id.lexeme + " is not defined in the environment.");
             throw new Exception("[Error at :] Variable " + id.lexeme + " is not defined.");
         }
 
-        // Validate the type of the expression and check the expression type if it's an identifier
         if (expr instanceof ParseTree.ExprIdent) {
             ParseTree.ExprIdent exprIdent = (ParseTree.ExprIdent) expr;
             if (env.Get(exprIdent.ident) == null) {
-                System.out.println("Debug: Variable " + exprIdent.ident + " is not defined in the environment.");
                 throw new Exception("[Error at :] Variable " + exprIdent.ident + " is not defined.");
             }
         }
 
-        // Check the type of the expression
         String exprType = expr.info.getType();
         if (exprType.equals("bool") && typeInfo.equals("num")) {
             throw new Exception("[Error at :] Variable " + id.lexeme + " should have " + typeInfo + " value, instead of " + exprType + " value.");
         }
 
-        // Assign the value to the variable
         if (expr instanceof ParseTree.ExprNumLit) {
             Object exprVal = ((ParseTree.ExprNumLit) expr).val;
             env.Put(id.lexeme, exprVal);
@@ -301,6 +342,7 @@ public class ParserImpl
 
         // Proceed with the assignment if the index is valid
         ParseTree.AssignStmtForArray assignStmt = new ParseTree.AssignStmtForArray(id.lexeme, indexExpr, valueExpr);
+        assignStmt.ident_reladdr = 1;
         return assignStmt;
     }
 
@@ -329,6 +371,27 @@ public class ParserImpl
     }
     Object localdecl____VAR_IDENT_TYPEOF_typespec_SEMI(Object s1, Object s2, Object s3, Object s4, Object s5) throws Exception
     {
+        /*Token              id       = (Token             )s2;
+        ParseTree.TypeSpec typespec = (ParseTree.TypeSpec)s4;
+        int relativeAddress = env.currentScopeSize() + 1;
+
+        if (!env.isDeclaredInCurrentScope(id.lexeme)) {
+            ParseTreeInfo.LocalDeclInfo info = new ParseTreeInfo.LocalDeclInfo();
+            info.setType(typespec.typename);
+            info.setName(id.lexeme);
+            info.setRelAddress(relativeAddress);
+
+            env.Put(id.lexeme, info);
+            System.out.println("Declared " + id.lexeme + " in current scope with type " + typespec.typename);
+        } else {
+            throw new Exception("[Error at :] Identifier " + id.lexeme + " is already defined.");
+        }
+
+        ParseTree.LocalDecl localdecl = new ParseTree.LocalDecl(id.lexeme, typespec);
+        localdecl.reladdr = relativeAddress;
+        System.out.println("Relative Address: " + relativeAddress);
+        return localdecl;*/
+
         Token              id       = (Token             )s2;
         ParseTree.TypeSpec typespec = (ParseTree.TypeSpec)s4;
         ParseTree.LocalDecl localdecl = new ParseTree.LocalDecl(id.lexeme, typespec);
@@ -339,7 +402,7 @@ public class ParserImpl
         }
 
         typespec.info.setType(id.lexeme);
-        System.out.println("PUTTING INTO ENV TABLE WITH TYPENAME FOR: " + id.lexeme);
+        System.out.println("PUTTING INTO ENV TABLE WITH TYPENAME FOR: " + id.lexeme + " WITH TYPE: " + typespec.typename);
         env.Put(id.lexeme, typespec.typename);
         return localdecl;
     }
@@ -371,6 +434,11 @@ public class ParserImpl
         ParseTree.Expr expr = (ParseTree.Expr) s2;
         ArrayList<ParseTree.Stmt> stmtList = (ArrayList<ParseTree.Stmt>) s4;
 
+        System.out.println("Evaluating expression: " + expr.toString());
+        System.out.println("Expression type: " + expr.info.getType());
+
+        setTypeBasedOnVal(expr);
+
         // Ensure the condition expression is a boolean
         String exprType = expr.info.getType();
         if (!exprType.equals("bool")) {
@@ -388,8 +456,12 @@ public class ParserImpl
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     Object compound_stmt____BEGIN_local_decls_stmt_list_END(Object s1, Object s2, Object s3, Object s4) {
+        enterBlock();
+
         ArrayList<ParseTree.LocalDecl> localDecls = (ArrayList<ParseTree.LocalDecl>) s2;
         ArrayList<ParseTree.Stmt> stmtList = (ArrayList<ParseTree.Stmt>) s3;
+
+        exitBlock();
         return new ParseTree.CompoundStmt(localDecls, stmtList);
     }
 
@@ -721,7 +793,6 @@ public class ParserImpl
         String type1 = expr1.info.getType();
         String type2 = expr2.info.getType();
 
-
         if((expr1 instanceof ParseTree.ExprBoolLit) && (operType.equals("+")) && (expr2 instanceof ParseTree.ExprBoolLit))
         {
             throw new Exception("[Error at " + expr1.info.getLineno() + ":" + expr1.info.getColumn() + "] Binary operation " + oper.lexeme + " cannot be used with " + type1 + " and " + type2 + " values.");
@@ -846,6 +917,7 @@ public class ParserImpl
         String type = String.valueOf(expr instanceof ParseTree.ExprNumLit ? "num" : "bool");
         env.Put(oper.lexeme, "not");
         Object OperType = env.Get(oper.lexeme);
+        setTypeBasedOnVal(expr);
         if((OperType.equals("not")) && (expr instanceof ParseTree.ExprNumLit))
         {
             throw new Exception("[Error at " + expr.info.getLineno() + ":" + expr.info.getColumn() + "] Unary operation " + oper.lexeme + " cannot be used with " + type + " value.");

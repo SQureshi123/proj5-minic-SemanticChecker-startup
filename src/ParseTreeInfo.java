@@ -238,12 +238,14 @@ public class ParseTreeInfo
     {
         private String type;
         private String name;
+        private int relAddress;
         private int lineno;
         private int column;
 
         public LocalDeclInfo() {
             this.type = "";
             this.name = "";
+            this.relAddress = 1;
             this.lineno = 1;
             this.column = 1;
         }
@@ -262,6 +264,14 @@ public class ParseTreeInfo
 
         public void setName(String name) {
             this.name = name;
+        }
+
+        public int getRelAddress() {
+            return relAddress;
+        }
+
+        public void setRelAddress(int relAddress) {
+            this.relAddress = relAddress;
         }
 
         public int getLineno() {
