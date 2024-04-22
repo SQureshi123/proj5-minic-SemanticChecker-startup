@@ -282,21 +282,26 @@ public class ParserImpl
     }
 
 
-    Object assignstmt____IDENT_LBRACKET_expr_RBRACKET_ASSIGN_expr_SEMI(Object s1, Object s2, Object s3, Object s4, Object s5, Object s6, Object s7) throws Exception
-    {
-        Token id = (Token)s1;
-        ParseTree.Expr expr1 = (ParseTree.Expr)s3;
-        ParseTree.Expr expr2 = (ParseTree.Expr)s6;
+    Object assignstmt____IDENT_LBRACKET_expr_RBRACKET_ASSIGN_expr_SEMI(Object s1, Object s2, Object s3, Object s4, Object s5, Object s6, Object s7) throws Exception {
+        Token id = (Token)s1; // the identifier for the array
+        ParseTree.Expr indexExpr = (ParseTree.Expr)s3; // the index expression
+        ParseTree.Expr valueExpr = (ParseTree.Expr)s6; // the expression to assign
 
-        setTypeBasedOnVal(expr1);
-
-        if (!expr1.info.getType().equals("num")) {
-            throw new Exception("[Error at " + expr1.info.getLineno() + ":" + expr1.info.getColumn() + "] Array index must be num value.");
+        // First, check if the array 'id' is defined in the environment
+        if (env.Get(id.lexeme) == null) {
+            throw new Exception("[Error at :] Array " + id.lexeme + " is not defined.");
         }
 
-        ParseTree.AssignStmtForArray assignstmtArr = new ParseTree.AssignStmtForArray(id.lexeme, expr1, expr2);
-        assignstmtArr.ident_reladdr = 1;
-        return assignstmtArr;
+        // Ensure that the index expression is of type num
+        setTypeBasedOnVal(indexExpr);
+        if (!indexExpr.info.getType().equals("num")) {
+            // If the index is not a number, throw an exception with the specific error message
+            throw new Exception("[Error at " + indexExpr.info.getLineno() + ":" + indexExpr.info.getColumn() + "] Array index must be num value.");
+        }
+
+        // Proceed with the assignment if the index is valid
+        ParseTree.AssignStmtForArray assignStmt = new ParseTree.AssignStmtForArray(id.lexeme, indexExpr, valueExpr);
+        return assignStmt;
     }
 
     Object returnstmt____RETURN_expr_SEMI(Object s1, Object s2, Object s3) throws Exception
@@ -350,6 +355,13 @@ public class ParserImpl
         ParseTree.Expr condition = (ParseTree.Expr) s2;
         ArrayList<ParseTree.Stmt> thenStmtList = (ArrayList<ParseTree.Stmt>) s4;
         ArrayList<ParseTree.Stmt> elseStmtList = (ArrayList<ParseTree.Stmt>) s6;
+
+        // Check if the condition expression type is boolean
+        String conditionType = condition.info.getType();
+        if (!conditionType.equals("bool")) {
+            throw new Exception("[Error at " + condition.info.getLineno() + ":" + condition.info.getColumn() + "] Condition of if or while statement should be bool value.");
+        }
+
         return new ParseTree.IfStmt(condition, thenStmtList, elseStmtList);
     }
 
@@ -359,13 +371,15 @@ public class ParserImpl
         ParseTree.Expr expr = (ParseTree.Expr) s2;
         ArrayList<ParseTree.Stmt> stmtList = (ArrayList<ParseTree.Stmt>) s4;
 
+        // Ensure the condition expression is a boolean
         String exprType = expr.info.getType();
         if (!exprType.equals("bool")) {
-            throw new Exception("[Error at :] While loop condition must be a boolean expression, but got " + exprType + " instead.");
+            throw new Exception("[Error at " + expr.info.getLineno() + ":" + expr.info.getColumn() + "] While loop condition must be a boolean expression, but got " + exprType + " instead.");
         }
 
+        // Ensure the while loop body is not empty
         if (stmtList.isEmpty()) {
-            throw new Exception("[Error at :] While loop body cannot be empty.");
+            throw new Exception("[Error at " + expr.info.getLineno() + ":" + expr.info.getColumn() + "] While loop body cannot be empty.");
         }
 
         return new ParseTree.WhileStmt(expr, stmtList);
@@ -886,9 +900,7 @@ public class ParserImpl
     Object expr____NEW_primtype_LBRACKET_expr_RBRACKET(Object s1, Object s2, Object s3, Object s4, Object s5) throws Exception
     {
         ParseTree.TypeSpec primtype = (ParseTree.TypeSpec)s2;
-        System.out.println("Here?");
         ParseTree.Expr expr = (ParseTree.Expr)s4;
-        System.out.println("Maybe here?");
         Object value = expr.info.getType();
         System.out.println("value: " + expr.info.getType());
         if(value.equals("true") || value.equals("false"))
@@ -902,14 +914,23 @@ public class ParserImpl
         ParseTree.ExprNewArray result = new ParseTree.ExprNewArray(primtype, expr);
         return result;
     }
-    Object expr____IDENT_LBRACKET_expr_RBRACKET(Object s1, Object s2, Object s3, Object s4) throws Exception
-    {
+    Object expr____IDENT_LBRACKET_expr_RBRACKET(Object s1, Object s2, Object s3, Object s4) throws Exception {
         Token id = (Token)s1;
-        ParseTree.Expr expr = (ParseTree.Expr)s3;
-        Object value = expr.info.getType();
-        System.out.println("Value: " + value);
-        ParseTree.ExprArrayElem result = new ParseTree.ExprArrayElem(id.lexeme, expr);
-        result.reladdr = 1;
+        ParseTree.Expr indexExpr = (ParseTree.Expr)s3;
+
+        // First, determine the type of the index expression
+        setTypeBasedOnVal(indexExpr);
+        String indexType = indexExpr.info.getType();
+        System.out.println("Type of index: " + indexType);
+
+        // Check if the index expression type is numeric
+        if (!indexType.equals("num")) {
+            throw new Exception("[Error at " + indexExpr.info.getLineno() + ":" + indexExpr.info.getColumn() + "] Array index must be num value.");
+        }
+
+        // If the index type is correct, proceed with creating the array element access expression
+        ParseTree.ExprArrayElem result = new ParseTree.ExprArrayElem(id.lexeme, indexExpr);
+        result.reladdr = 1;  // Ensure that the relative address is set if needed for code generation or other purposes
         return result;
     }
     Object expr____IDENT_DOT_SIZE(Object s1, Object s2, Object s3) throws Exception
