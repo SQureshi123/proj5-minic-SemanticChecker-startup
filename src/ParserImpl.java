@@ -146,6 +146,7 @@ public class ParserImpl
         funcdecl.info.setName(funcdecl.ident);
         funcdecl.info.setType(funcdecl.rettype.typename);
 
+
         return funcdecl;
     }
     Object fundecl____FUNC_IDENT_TYPEOF_typespec_LPAREN_params_RPAREN_BEGIN_localdecls_X10_stmtlist_END(Object s1, Object s2, Object s3, Object s4, Object s5, Object s6, Object s7, Object s8, Object s9, Object s10, Object s11, Object s12) throws Exception
@@ -161,6 +162,10 @@ public class ParserImpl
         ArrayList<ParseTree.Stmt>        stmtlist   = (ArrayList<ParseTree.Stmt>       )s11;
         Token                            end        = (Token                           )s12;
         ParseTree.FuncDecl funcdecl = new ParseTree.FuncDecl(id.lexeme, rettype, params, localdecls, stmtlist);
+        String functionName = (String) env.Get("function");
+        if (localdecls.isEmpty() && stmtlist.isEmpty()) {
+            throw new Exception("[Error at :] Function " + functionName + "() should return at least one value.");
+        }
         return funcdecl;
     }
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -176,20 +181,10 @@ public class ParserImpl
     }
     Object paramlist____paramlist_COMMA_param(Object s1, Object s2, Object s3) throws Exception
     {
-
-        ArrayList<ParseTree.Param> paramList;
-
-        if (s1 instanceof ArrayList) {
-            paramList = (ArrayList<ParseTree.Param>) s1;
-        } else {
-            paramList = new ArrayList<>();
-            paramList.add((ParseTree.Param) s1);
-        }
-
-        ParseTree.Param param = (ParseTree.Param) s3;
-        paramList.add(param);
-
-        return paramList;
+        ArrayList<ParseTree.Param> paramlist = (ArrayList<ParseTree.Param>)s1;
+        ParseTree.Param            param     = (ParseTree.Param           )s3;
+        paramlist.add(param);
+        return paramlist;
     }
 
     Object paramlist____param(Object s1) throws Exception
@@ -204,6 +199,9 @@ public class ParserImpl
         Token id = (Token) s1;
         ParseTree.TypeSpec typespec = (ParseTree.TypeSpec)s3;
         ParseTree.Param param = new ParseTree.Param(id.lexeme, typespec);
+        System.out.println("PARAM TYPEOF: " + id.lexeme + " " + typespec.typename);
+        env.Put(id.lexeme, typespec.typename);
+        typespec.info.setType(id.lexeme);
         param.reladdr = 1;
         return param;
 
@@ -300,13 +298,24 @@ public class ParserImpl
         ParseTree.Expr indexExpr = (ParseTree.Expr)s3; // the index expression
         ParseTree.Expr valueExpr = (ParseTree.Expr)s6; // the expression to assign
 
+        String fullType = (String) env.Get(id.lexeme);
+        String baseType = fullType.substring(0, fullType.length() - 2);
+
+        setTypeBasedOnVal(indexExpr);
+
         // First, check if the array 'id' is defined in the environment
         if (env.Get(id.lexeme) == null) {
             throw new Exception("[Error at :] Array " + id.lexeme + " is not defined.");
         }
+        if (!fullType.endsWith("[]")) {
+            throw new Exception("[Error at :] Identifier " + id.lexeme + " should be array variable.");
+        }
+        if (!valueExpr.info.getType().equals(baseType)) {
+            throw new Exception("[Error at :] Element of array " + id.lexeme + " should have " + baseType + " value, instead of " + valueExpr.info.getType() + " value.");
+        }
 
-        // Ensure that the index expression is of type num
-        setTypeBasedOnVal(indexExpr);
+        System.out.println("Index Expr: " + indexExpr);
+
         if (!indexExpr.info.getType().equals("num")) {
             // If the index is not a number, throw an exception with the specific error message
             throw new Exception("[Error at " + indexExpr.info.getLineno() + ":" + indexExpr.info.getColumn() + "] Array index must be num value.");
@@ -363,27 +372,6 @@ public class ParserImpl
     }
     Object localdecl____VAR_IDENT_TYPEOF_typespec_SEMI(Object s1, Object s2, Object s3, Object s4, Object s5) throws Exception
     {
-        /*Token              id       = (Token             )s2;
-        ParseTree.TypeSpec typespec = (ParseTree.TypeSpec)s4;
-        int relativeAddress = env.currentScopeSize() + 1;
-
-        if (!env.isDeclaredInCurrentScope(id.lexeme)) {
-            ParseTreeInfo.LocalDeclInfo info = new ParseTreeInfo.LocalDeclInfo();
-            info.setType(typespec.typename);
-            info.setName(id.lexeme);
-            info.setRelAddress(relativeAddress);
-
-            env.Put(id.lexeme, info);
-            System.out.println("Declared " + id.lexeme + " in current scope with type " + typespec.typename);
-        } else {
-            throw new Exception("[Error at :] Identifier " + id.lexeme + " is already defined.");
-        }
-
-        ParseTree.LocalDecl localdecl = new ParseTree.LocalDecl(id.lexeme, typespec);
-        localdecl.reladdr = relativeAddress;
-        System.out.println("Relative Address: " + relativeAddress);
-        return localdecl;*/
-
         Token              id       = (Token             )s2;
         ParseTree.TypeSpec typespec = (ParseTree.TypeSpec)s4;
         ParseTree.LocalDecl localdecl = new ParseTree.LocalDecl(id.lexeme, typespec);
@@ -396,6 +384,7 @@ public class ParserImpl
         typespec.info.setType(id.lexeme);
         System.out.println("PUTTING INTO ENV TABLE WITH TYPENAME FOR: " + id.lexeme + " WITH TYPE: " + typespec.typename);
         env.Put(id.lexeme, typespec.typename);
+
         return localdecl;
     }
 
@@ -509,7 +498,7 @@ public class ParserImpl
         }
 
         ParseTree.ExprAdd result = new ParseTree.ExprAdd(expr1, expr2);
-        result.info = expr1.info;
+        result.info.setType("num");
 
         return result;
     }
@@ -541,7 +530,7 @@ public class ParserImpl
 
         ParseTree.ExprSub result = new ParseTree.ExprSub(expr1, expr2);
 
-        result.info = expr1.info;
+        result.info.setType("num");
 
         return result;
     }
@@ -574,7 +563,7 @@ public class ParserImpl
 
         ParseTree.ExprMul result = new ParseTree.ExprMul(expr1, expr2);
 
-        result.info = expr1.info;
+        result.info.setType("num");
 
         return result;
     }
@@ -607,7 +596,7 @@ public class ParserImpl
         ParseTree.ExprDiv result = new ParseTree.ExprDiv(expr1, expr2);
 
         result.info = new ParseTreeInfo.ExprInfo();
-        result.info.setType(type1);
+        result.info.setType("num");
 
         return result;
     }
@@ -639,7 +628,7 @@ public class ParserImpl
 
         ParseTree.ExprMod result = new ParseTree.ExprMod(expr1, expr2);
 
-        result.info = expr1.info;
+        result.info.setType("num");
 
         return result;
     }
@@ -656,7 +645,7 @@ public class ParserImpl
         setTypeBasedOnVal(expr1);
         setTypeBasedOnVal(expr2);
 
-        env.Put(oper.lexeme, "==");
+        env.Put(oper.lexeme, "=");
         Object operType = env.Get(oper.lexeme);
 
         String type1 = expr1.info.getType();
@@ -671,7 +660,7 @@ public class ParserImpl
 
         ParseTree.ExprEq result = new ParseTree.ExprEq(expr1, expr2);
 
-        result.info = expr1.info;
+        result.info.setType("bool");
 
         return result;
     }
@@ -703,7 +692,7 @@ public class ParserImpl
         }
 
         ParseTree.ExprNe result = new ParseTree.ExprNe(expr1, expr2);
-        result.info = expr1.info;
+        result.info.setType("bool");
         return result;
     }
     Object expr____expr_LE_expr(Object s1, Object s2, Object s3) throws Exception
@@ -733,7 +722,7 @@ public class ParserImpl
         }
 
         ParseTree.ExprLe result = new ParseTree.ExprLe(expr1, expr2);
-        result.info = expr1.info;
+        result.info.setType("bool");
         return result;
     }
     Object expr____expr_LT_expr(Object s1, Object s2, Object s3) throws Exception
@@ -763,7 +752,7 @@ public class ParserImpl
         }
 
         ParseTree.ExprLt result = new ParseTree.ExprLt(expr1, expr2);
-        result.info = expr1.info;
+        result.info.setType("bool");
         return result;
     }
     Object expr____expr_GE_expr(Object s1, Object s2, Object s3) throws Exception
@@ -793,7 +782,7 @@ public class ParserImpl
         }
 
         ParseTree.ExprGe result = new ParseTree.ExprGe(expr1, expr2);
-        result.info = expr1.info;
+        result.info.setType("bool");
         return result;
     }
     Object expr____expr_GT_expr(Object s1, Object s2, Object s3) throws Exception
@@ -833,7 +822,7 @@ public class ParserImpl
 
         ParseTree.ExprGt result = new ParseTree.ExprGt(expr1,expr2);
 
-        result.info = expr1.info;
+        result.info.setType("bool");
 
         return result;
     }
@@ -868,7 +857,7 @@ public class ParserImpl
         }
 
         ParseTree.ExprAnd result = new ParseTree.ExprAnd(expr1, expr2);
-        result.info = expr1.info;
+        result.info.setType("bool");
         return result;
     }
     Object expr____expr_OR_expr(Object s1, Object s2, Object s3) throws Exception
@@ -899,7 +888,7 @@ public class ParserImpl
         }
 
         ParseTree.ExprOr result = new ParseTree.ExprOr(expr1, expr2);
-        result.info = expr1.info;
+        result.info.setType("bool");
         return result;
     }
     Object expr____NOT_expr(Object s1, Object s2) throws Exception
@@ -914,11 +903,8 @@ public class ParserImpl
         {
             throw new Exception("[Error at " + expr.info.getLineno() + ":" + expr.info.getColumn() + "] Unary operation " + oper.lexeme + " cannot be used with " + type + " value.");
         }
-        if(type.equals("true") || type.equals("false")) {
-            type = "bool";
-        }
         ParseTree.ExprNot result = new ParseTree.ExprNot(expr);
-        result.info.setType(type);
+        result.info.setType("bool");
         return result;
     }
     Object expr____LPAREN_expr_RPAREN(Object s1, Object s2, Object s3) throws Exception
@@ -931,13 +917,10 @@ public class ParserImpl
     Object expr____IDENT(Object s1) throws Exception
     {
         Token id = (Token)s1;
-
-        String type = (String) env.Get(id.lexeme + "_type");
-        if (type == null) {
-            throw new Exception("Variable " + id.lexeme + " not defined");
-        }
         ParseTree.ExprIdent result = new ParseTree.ExprIdent(id.lexeme);
-        result.info.setType(type);
+        result.reladdr = 1;
+        System.out.println("ID.LEXEME: " + id);
+        result.info.setType(id.lexeme);
         return result;
     }
     Object expr____NUMLIT(Object s1) throws Exception
