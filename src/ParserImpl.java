@@ -32,6 +32,26 @@ public class ParserImpl
         }
     }
 
+    public static String ordinalSuffix(int value) {
+        int hundredRemainder = value % 100;
+        int tenRemainder = value % 10;
+
+        if (hundredRemainder - tenRemainder == 10) {
+            return "th";
+        }
+
+        switch (tenRemainder) {
+            case 1:
+                return "st";
+            case 2:
+                return "nd";
+            case 3:
+                return "rd";
+            default:
+                return "th";
+        }
+    }
+
     private void setTypeBasedOnVal(ParseTree.Expr expr) {
         if (expr instanceof ParseTree.ExprIdent) {
             ParseTree.ExprIdent exprIdent = (ParseTree.ExprIdent) expr;
@@ -137,19 +157,33 @@ public class ParserImpl
         funcInfo.setName(id.lexeme);
         funcInfo.setType(returnType.typename);
 
+        int paramsSize = 0;
+
         for (ParseTree.Param param : params) {
             env.Put(param.ident, param.typespec.typename);
+            System.out.println("Added parameter " + param.ident + " to env with type " + param.typespec.typename + "@@@@@@@@@@@@@@");
             env.Put(param.ident+"paramType", param.typespec.typename);
+            env.Put("param" + paramsSize, param.typespec.typename);
+            paramsSize++;
+            System.out.println("PARAMS_SIZE: " + paramsSize + " -=-=-=-=-=-=-=-=--=-");
         }
+
+        System.out.println("PARAMS_SIZE: " + paramsSize + " -=-=-=-=-=-=-=-=--=-");
+
+        /*if (!(paramsSize == 0)) {
+            env.Put("expectedParamsSize", paramsSize);
+        } else {
+            env.Put("expectedParamsSize", 0);
+        }*/
 
         Env newEnv = new Env(env);
         env = newEnv;
         env.Put("returnType", returnType.typename);
         env.Put("function", id.lexeme);
-        if (params.isEmpty()) {
-            env.Put("expectedParamsSize", 0);
+        if (!(paramsSize == 0)) {
+            env.Put(id.lexeme+"expectedParamsSize", paramsSize);
         } else {
-            env.Put("expectedParamsSize", params.size());
+            env.Put(id.lexeme+"expectedParamsSize", 0);
         }
         env.Put(id.lexeme, id.lexeme);
         funcdecl.info.setName(funcdecl.ident);
@@ -289,6 +323,9 @@ public class ParserImpl
 
         String exprType = expr.info.getType();
         if (exprType.equals("bool") && typeInfo.equals("num")) {
+            throw new Exception("[Error at :] Variable " + id.lexeme + " should have " + typeInfo + " value, instead of " + exprType + " value.");
+        }
+        if (exprType.equals("num") && typeInfo.equals("bool")) {
             throw new Exception("[Error at :] Variable " + id.lexeme + " should have " + typeInfo + " value, instead of " + exprType + " value.");
         }
 
@@ -962,21 +999,34 @@ public class ParserImpl
         Token id = (Token)s1;
         ArrayList<ParseTree.Arg> args = (ArrayList<ParseTree.Arg>)s3;
 
-        Integer expectedParams = (Integer) env.Get(id.lexeme + "expectedParams");
-        Object expectedParamType = env.Get(id.lexeme + "paramType");
-        System.out.println("EXPECTED PARAM TYPE: " + expectedParamType + "///////////////////////////");
+        Integer expectedParams = (Integer) env.Get(id.lexeme + "expectedParamsSize");
+        //Object expectedParamType = env.Get(args + "paramType");
+        //System.out.println("EXPECTED PARAM TYPE: " + expectedParamType + "///////////////////////////");
         if (expectedParams == null) {
             expectedParams = 0;
         }
         Object funcDefined = env.Get(id.lexeme);
+        System.out.println("ID.LEXEME IDENT LPAREN: " + id.lexeme);
         System.out.println("FUNC DEFINED: " + funcDefined + "+++++++++++++++++++++++++");
+        System.out.println("EXPECTED PARAMS SIZE DEFINED: " + expectedParams + "+++++++++++++++++++++++++----");
         //ParseTreeInfo.FuncDeclInfo funcInfo = (ParseTreeInfo.FuncDeclInfo) env.Get(id.lexeme);
 
         if (!id.lexeme.equals(funcDefined)) {
             throw new Exception("[Error at :] Function " + id.lexeme + "() is not declared.");
         }
+
         if (args.size() != expectedParams) {
             throw new Exception("[Error at :] Function " + id.lexeme + "() should be called with the correct number of arguments.");
+        }
+
+        for (int i = 0; i < args.size(); i++) {
+            ParseTree.Arg actualArg = args.get(i);
+            Object expectedArg = env.Get("param"+i);
+            System.out.println("ARGGGGGGGGGG: " + actualArg.expr.info.getType());
+            System.out.println("ARGGGGGGGGGG2: " + env.Get("param"+i));
+            if (!actualArg.expr.info.getType().equals(expectedArg)) {
+                throw new Exception("[Error at :] The " + (i+1) + ordinalSuffix(i + 1) + " argument of function " + funcDefined + "() should be a " + expectedArg + " value, instead of a " + actualArg.expr.info.getType() + " value.");
+            }
         }
 
 
