@@ -132,16 +132,25 @@ public class ParserImpl
 
         ParseTree.FuncDecl funcdecl = new ParseTree.FuncDecl(id.lexeme, returnType, params, localdecls, new ArrayList<ParseTree.Stmt>());
 
+        ParseTreeInfo.FuncDeclInfo funcInfo = new ParseTreeInfo.FuncDeclInfo();
+
+        funcInfo.setName(id.lexeme);
+        funcInfo.setType(returnType.typename);
+
         for (ParseTree.Param param : params) {
             env.Put(param.ident, param.typespec.typename);
-            System.out.println("Param: " + param.ident + " " + param.typespec.typename);
+            env.Put(param.ident+"paramType", param.typespec.typename);
         }
 
         Env newEnv = new Env(env);
         env = newEnv;
         env.Put("returnType", returnType.typename);
         env.Put("function", id.lexeme);
-        env.Put("expectedParamsSize", params.size());
+        if (params.isEmpty()) {
+            env.Put("expectedParamsSize", 0);
+        } else {
+            env.Put("expectedParamsSize", params.size());
+        }
         env.Put(id.lexeme, id.lexeme);
         funcdecl.info.setName(funcdecl.ident);
         funcdecl.info.setType(funcdecl.rettype.typename);
@@ -184,6 +193,8 @@ public class ParserImpl
         ArrayList<ParseTree.Param> paramlist = (ArrayList<ParseTree.Param>)s1;
         ParseTree.Param            param     = (ParseTree.Param           )s3;
         paramlist.add(param);
+        System.out.println("PARAMLIST COMMA PARAM: " + env.Get(param.ident).toString() + "_________________________");
+        param.info.setType(env.Get(param.ident).toString());
         return paramlist;
     }
 
@@ -299,17 +310,16 @@ public class ParserImpl
         ParseTree.Expr valueExpr = (ParseTree.Expr)s6; // the expression to assign
 
         String fullType = (String) env.Get(id.lexeme);
-        String baseType = fullType.substring(0, fullType.length() - 2);
 
         setTypeBasedOnVal(indexExpr);
 
-        // First, check if the array 'id' is defined in the environment
         if (env.Get(id.lexeme) == null) {
             throw new Exception("[Error at :] Array " + id.lexeme + " is not defined.");
         }
         if (!fullType.endsWith("[]")) {
             throw new Exception("[Error at :] Identifier " + id.lexeme + " should be array variable.");
         }
+        String baseType = fullType.substring(0, fullType.length() - 2);
         if (!valueExpr.info.getType().equals(baseType)) {
             throw new Exception("[Error at :] Element of array " + id.lexeme + " should have " + baseType + " value, instead of " + valueExpr.info.getType() + " value.");
         }
@@ -317,11 +327,9 @@ public class ParserImpl
         System.out.println("Index Expr: " + indexExpr);
 
         if (!indexExpr.info.getType().equals("num")) {
-            // If the index is not a number, throw an exception with the specific error message
             throw new Exception("[Error at " + indexExpr.info.getLineno() + ":" + indexExpr.info.getColumn() + "] Array index must be num value.");
         }
 
-        // Proceed with the assignment if the index is valid
         ParseTree.AssignStmtForArray assignStmt = new ParseTree.AssignStmtForArray(id.lexeme, indexExpr, valueExpr);
         assignStmt.ident_reladdr = 1;
         return assignStmt;
@@ -919,8 +927,15 @@ public class ParserImpl
         Token id = (Token)s1;
         ParseTree.ExprIdent result = new ParseTree.ExprIdent(id.lexeme);
         result.reladdr = 1;
-        System.out.println("ID.LEXEME: " + id);
-        result.info.setType(id.lexeme);
+
+        Object type = env.Get(id.lexeme);
+        System.out.println("TYPE IN EXPR____IDENT: " + type);
+        /*if (type == null) {
+            throw new Exception("Identifier '" + id.lexeme + "' not defined.");
+        }*/
+
+        result.info.setType(type.toString());
+
         return result;
     }
     Object expr____NUMLIT(Object s1) throws Exception
@@ -948,8 +963,16 @@ public class ParserImpl
         ArrayList<ParseTree.Arg> args = (ArrayList<ParseTree.Arg>)s3;
 
         Integer expectedParams = (Integer) env.Get(id.lexeme + "expectedParams");
-
+        Object expectedParamType = env.Get(id.lexeme + "paramType");
+        System.out.println("EXPECTED PARAM TYPE: " + expectedParamType + "///////////////////////////");
         if (expectedParams == null) {
+            expectedParams = 0;
+        }
+        Object funcDefined = env.Get(id.lexeme);
+        System.out.println("FUNC DEFINED: " + funcDefined + "+++++++++++++++++++++++++");
+        //ParseTreeInfo.FuncDeclInfo funcInfo = (ParseTreeInfo.FuncDeclInfo) env.Get(id.lexeme);
+
+        if (!id.lexeme.equals(funcDefined)) {
             throw new Exception("[Error at :] Function " + id.lexeme + "() is not declared.");
         }
         if (args.size() != expectedParams) {
@@ -981,19 +1004,22 @@ public class ParserImpl
         Token id = (Token)s1;
         ParseTree.Expr indexExpr = (ParseTree.Expr)s3;
 
-        // First, determine the type of the index expression
         setTypeBasedOnVal(indexExpr);
         String indexType = indexExpr.info.getType();
         System.out.println("Type of index: " + indexType);
+        Object fullType = env.Get(id.lexeme);
+        System.out.println("IDENT EXPR FULLTYPE: " + fullType + " ______________");
 
-        // Check if the index expression type is numeric
+        if (!fullType.toString().endsWith("[]")) {
+            throw new Exception("[Error at " + indexExpr.info.getLineno() + ":" + indexExpr.info.getColumn() + "] Identifier " + id.lexeme + " should be array variable.");
+        }
+
         if (!indexType.equals("num")) {
             throw new Exception("[Error at " + indexExpr.info.getLineno() + ":" + indexExpr.info.getColumn() + "] Array index must be num value.");
         }
 
-        // If the index type is correct, proceed with creating the array element access expression
         ParseTree.ExprArrayElem result = new ParseTree.ExprArrayElem(id.lexeme, indexExpr);
-        result.reladdr = 1;  // Ensure that the relative address is set if needed for code generation or other purposes
+        result.reladdr = 1;
         return result;
     }
     Object expr____IDENT_DOT_SIZE(Object s1, Object s2, Object s3) throws Exception
