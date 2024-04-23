@@ -6,6 +6,7 @@ public class Env
     private HashMap<String, Object> symbols;
     public Env prev;
     private int variableCount = 0;
+
     public Env(Env prev)
     {
         this.symbols = new HashMap<>();
