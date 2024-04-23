@@ -1,4 +1,3 @@
-
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * Copyright (C) 2000 Gerwin Klein <lsf@jflex.de>                          *
  * All rights reserved.                                                    *
@@ -26,6 +25,14 @@
     this.lineno = 1;
     this.column = 1;
   }
+   public int getLine(){
+        return yyline+1;
+    }
+
+    public int getColumn(){
+      return yycolumn+1;
+    }
+
 
 %}
 
@@ -85,6 +92,7 @@ blockcomment = "{"[^]*"}"
 
 
 \b     { System.err.println("Sorry, backspace doesn't work"); }
+
 
 /* error fallback */
 [^]    { System.err.println("Error: unexpected character '"+yytext()+"'"); return -1; }

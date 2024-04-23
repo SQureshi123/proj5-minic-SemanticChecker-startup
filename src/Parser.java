@@ -495,6 +495,10 @@ final static String yyrule[] = {
             yylval = new ParserVal(0);
             yyl_return = lexer.yylex();
             last_token = (Token)yylval.obj;
+            if(last_token != null){
+                last_token.lineno = lexer.getLine();
+                last_token.column = lexer.getColumn();
+            }
         }
         catch (IOException e) {
             System.out.println("IO error :"+e);
@@ -515,7 +519,7 @@ final static String yyrule[] = {
         this.lexer   = new Lexer(r, this);
         this.yydebug = yydebug;
     }
-//#line 446 "Parser.java"
+//#line 450 "Parser.java"
 //###############################################################
 // method: yylexdebug : check lexer state
 //###############################################################
@@ -906,7 +910,7 @@ case 59:
 //#line 147 "Parser.y"
 { Debug("expr -> IDENT DOT SIZE"                ); yyval.obj = expr____IDENT_DOT_SIZE          (val_peek(2).obj,val_peek(1).obj,val_peek(0).obj   ); }
 break;
-//#line 831 "Parser.java"
+//#line 835 "Parser.java"
 //########## END OF USER-SUPPLIED ACTIONS ##########
     }//switch
     //#### Now let's reduce... ####

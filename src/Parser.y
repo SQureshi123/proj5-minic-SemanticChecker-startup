@@ -157,6 +157,10 @@ expr            : expr ADD expr                                 { Debug("expr ->
             yylval = new ParserVal(0);
             yyl_return = lexer.yylex();
             last_token = (Token)yylval.obj;
+            if(last_token != null){
+                last_token.lineno = lexer.getLine();
+                last_token.column = lexer.getColumn();
+            }
         }
         catch (IOException e) {
             System.out.println("IO error :"+e);

@@ -11,6 +11,7 @@ public class ParserImpl
             System.out.println(message);
     }
 
+
     // This is for chained symbol table.
     // This includes the global scope only at this moment.
     Env env = new Env(null);
@@ -279,6 +280,8 @@ public class ParserImpl
     {
         assert(s1 instanceof ParseTree.ReturnStmt);
         return s1;
+
+
     }
     Object stmt____ifstmt(Object s1) throws Exception
     {
@@ -400,6 +403,17 @@ public class ParserImpl
         //String expectedReturnType =
 
         return new ParseTree.ReturnStmt(expr);
+
+      //  String exprType = expr.info.getType();
+
+       // String expectedReturnType = parseTreeInfo.getReturnType();
+
+        // Check if the expression type matches with the function's return type
+      //  if (!exprType.equals(expectedReturnType)) {
+        //    throw new Exception("Return type mismatch: Expected " + exprType + ", but found " + expectedReturnType);
+       // }
+
+
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -987,12 +1001,14 @@ public class ParserImpl
     }
     Object expr____BOOLLIT(Object s1) throws Exception
     {
-        Token bool = (Token)s1;
-        Boolean value = Boolean.parseBoolean(bool.lexeme);
-        ParseTree.ExprBoolLit result = new ParseTree.ExprBoolLit(value);
-        result.info.setType("bool");
-        result.info.setValue(bool.lexeme);
-        return result;
+        Token token = (Token)s1; // Token containing boolean literal
+        boolean value = Boolean.parseBoolean(token.lexeme);
+        ParseTree.ExprBoolLit expr = new ParseTree.ExprBoolLit(value);
+        expr.info.setColumn(token.column);
+        expr.info.setLineno(token.lineno);
+        expr.info.setType("bool");
+        expr.info.setValue(token.lexeme);
+        return expr;
     }
     Object expr____IDENT_LPAREN_args_RPAREN(Object s1, Object s2, Object s3, Object s4) throws Exception
     {
