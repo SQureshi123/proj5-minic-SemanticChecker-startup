@@ -78,6 +78,7 @@ public class ParserImpl
                     expr.info.setType("bool");
                 } else {
                     System.out.println("Val is not num or bool: " + value);
+                    expr.info.setType("function");
                 }
             }
         }
@@ -156,6 +157,7 @@ public class ParserImpl
         ParseTreeInfo.FuncDeclInfo funcInfo = new ParseTreeInfo.FuncDeclInfo();
 
         funcInfo.setName(id.lexeme);
+        env.Put(id.lexeme + "func", id.lexeme + "()");
         funcInfo.setType(returnType.typename);
 
         int paramsSize = 0;
@@ -208,7 +210,7 @@ public class ParserImpl
         ParseTree.FuncDecl funcdecl = new ParseTree.FuncDecl(id.lexeme, rettype, params, localdecls, stmtlist);
         String functionName = (String) env.Get("function");
         if (localdecls.isEmpty() && stmtlist.isEmpty()) {
-            throw new Exception("[Error at :] Function " + functionName + "() should return at least one value.");
+            throw new Exception("[Error at " + ((Token) s2).lineno + ":" + ((Token) s2).column + "] Function " + functionName + "() should return at least one value.");
         }
         return funcdecl;
     }
@@ -314,22 +316,22 @@ public class ParserImpl
 
         Object typeInfo = env.Get(id.lexeme);
         if (typeInfo == null) {
-            throw new Exception("[Error at :] Variable " + id.lexeme + " is not defined.");
+            throw new Exception("[Error at " + ((Token) s1).lineno + ":" + ((Token) s1).column + "] Variable " + id.lexeme + " is not defined.");
         }
 
         if (expr instanceof ParseTree.ExprIdent) {
             ParseTree.ExprIdent exprIdent = (ParseTree.ExprIdent) expr;
             if (env.Get(exprIdent.ident) == null) {
-                throw new Exception("[Error at :] Variable " + exprIdent.ident + " is not defined.");
+                throw new Exception("[Error at " + ((Token) s1).lineno + ":" + ((Token) s1).column + "] Variable " + exprIdent.ident + " is not defined.");
             }
         }
 
         String exprType = expr.info.getType();
         if (exprType.equals("bool") && typeInfo.equals("num")) {
-            throw new Exception("[Error at :] Variable " + id.lexeme + " should have " + typeInfo + " value, instead of " + exprType + " value.");
+            throw new Exception("[Error at " + ((Token) s1).lineno + ":" + ((Token) s1).column + "] Variable " + id.lexeme + " should have " + typeInfo + " value, instead of " + exprType + " value.");
         }
         if (exprType.equals("num") && typeInfo.equals("bool")) {
-            throw new Exception("[Error at :] Variable " + id.lexeme + " should have " + typeInfo + " value, instead of " + exprType + " value.");
+            throw new Exception("[Error at " + ((Token) s1).lineno + ":" + ((Token) s1).column + "] Variable " + id.lexeme + " should have " + typeInfo + " value, instead of " + exprType + " value.");
         }
 
         if (expr instanceof ParseTree.ExprNumLit) {
@@ -354,20 +356,20 @@ public class ParserImpl
         setTypeBasedOnVal(indexExpr);
 
         if (env.Get(id.lexeme) == null) {
-            throw new Exception("[Error at :] Array " + id.lexeme + " is not defined.");
+            throw new Exception("[Error at " + ((Token) s1).lineno + ":" + ((Token) s1).column + "] Array " + id.lexeme + " is not defined.");
         }
         if (!fullType.endsWith("[]")) {
-            throw new Exception("[Error at :] Identifier " + id.lexeme + " should be array variable.");
+            throw new Exception("[Error at " + ((Token) s1).lineno + ":" + ((Token) s1).column + "] Identifier " + id.lexeme + " should be array variable.");
         }
         String baseType = fullType.substring(0, fullType.length() - 2);
         if (!valueExpr.info.getType().equals(baseType)) {
-            throw new Exception("[Error at :] Element of array " + id.lexeme + " should have " + baseType + " value, instead of " + valueExpr.info.getType() + " value.");
+            throw new Exception("[Error at " + ((Token) s1).lineno + ":" + ((Token) s1).column + "] Element of array " + id.lexeme + " should have " + baseType + " value, instead of " + valueExpr.info.getType() + " value.");
         }
 
         System.out.println("Index Expr: " + indexExpr);
 
         if (!indexExpr.info.getType().equals("num")) {
-            throw new Exception("[Error at " + indexExpr.info.getLineno() + ":" + indexExpr.info.getColumn() + "] Array index must be num value.");
+            throw new Exception("[Error at " + ((Token) s1).lineno + ":" + ((Token) s1).column + "] Array index must be num value.");
         }
 
         ParseTree.AssignStmtForArray assignStmt = new ParseTree.AssignStmtForArray(id.lexeme, indexExpr, valueExpr);
@@ -437,7 +439,7 @@ public class ParserImpl
 
         Object tokenid = env.Get(id.lexeme);
         if (tokenid != null) {
-            throw new Exception("[Error at :] Identifier " + id.lexeme + " is already defined.");
+            throw new Exception("[Error at " + id.lineno + ":" + id.column + "] Identifier " + id.lexeme + " is already defined.");
         }
 
         typespec.info.setType(id.lexeme);
@@ -549,11 +551,14 @@ public class ParserImpl
         String type1 = expr1.info.getType();
         String type2 = expr2.info.getType();
 
+        /*expr1.info.setColumn(oper.column);
+        expr2.info.setLineno(oper.lineno);*/
+
         if((expr1 instanceof ParseTree.ExprBoolLit) && (operType.equals("+")) && (expr2 instanceof ParseTree.ExprBoolLit))
         {
-            throw new Exception("[Error at " + expr1.info.getLineno() + ":" + expr1.info.getColumn() + "] Binary operation " + oper.lexeme + " cannot be used with " + type1 + " and " + type2 + " values.");
+            throw new Exception("[Error at " + ((Token) s2).lineno + ":" + ((Token) s2).column + "] Binary operation " + oper.lexeme + " cannot be used with " + type1 + " and " + type2 + " values.");
         } else if ((expr1 instanceof ParseTree.ExprBoolLit) || (expr2 instanceof ParseTree.ExprBoolLit)) {
-            throw new Exception("[Error at " + expr1.info.getLineno() + ":" + expr1.info.getColumn() + "] Binary operation " + oper.lexeme + " cannot be used with " + type1 + " and " + type2 + " values.");
+            throw new Exception("[Error at " + ((Token) s2).lineno + ":" + ((Token) s2).column + "] Binary operation " + oper.lexeme + " cannot be used with " + type1 + " and " + type2 + " values.");
         }
 
         ParseTree.ExprAdd result = new ParseTree.ExprAdd(expr1, expr2);
@@ -582,9 +587,9 @@ public class ParserImpl
 
         if((expr1 instanceof ParseTree.ExprBoolLit) && (operType.equals("+")) && (expr2 instanceof ParseTree.ExprBoolLit))
         {
-            throw new Exception("[Error at " + expr1.info.getLineno() + ":" + expr1.info.getColumn() + "] Binary operation " + oper.lexeme + " cannot be used with " + type1 + " and " + type2 + " values.");
+            throw new Exception("[Error at " + ((Token) s2).lineno + ":" + ((Token) s2).column + "] Binary operation " + oper.lexeme + " cannot be used with " + type1 + " and " + type2 + " values.");
         } else if ((expr1 instanceof ParseTree.ExprBoolLit) || (expr2 instanceof ParseTree.ExprBoolLit)) {
-            throw new Exception("[Error at " + expr1.info.getLineno() + ":" + expr1.info.getColumn() + "] Binary operation " + oper.lexeme + " cannot be used with " + type1 + " and " + type2 + " values.");
+            throw new Exception("[Error at " + ((Token) s2).lineno + ":" + ((Token) s2).column + "] Binary operation " + oper.lexeme + " cannot be used with " + type1 + " and " + type2 + " values.");
         }
 
         ParseTree.ExprSub result = new ParseTree.ExprSub(expr1, expr2);
@@ -615,9 +620,9 @@ public class ParserImpl
 
         if((expr1 instanceof ParseTree.ExprBoolLit) && (operType.equals("+")) && (expr2 instanceof ParseTree.ExprBoolLit))
         {
-            throw new Exception("[Error at " + expr1.info.getLineno() + ":" + expr1.info.getColumn() + "] Binary operation " + oper.lexeme + " cannot be used with " + type1 + " and " + type2 + " values.");
+            throw new Exception("[Error at " + ((Token) s2).lineno + ":" + ((Token) s2).column + "] Binary operation " + oper.lexeme + " cannot be used with " + type1 + " and " + type2 + " values.");
         } else if ((expr1 instanceof ParseTree.ExprBoolLit) || (expr2 instanceof ParseTree.ExprBoolLit)) {
-            throw new Exception("[Error at " + expr1.info.getLineno() + ":" + expr1.info.getColumn() + "] Binary operation " + oper.lexeme + " cannot be used with " + type1 + " and " + type2 + " values.");
+            throw new Exception("[Error at " + ((Token) s2).lineno + ":" + ((Token) s2).column + "] Binary operation " + oper.lexeme + " cannot be used with " + type1 + " and " + type2 + " values.");
         }
 
         ParseTree.ExprMul result = new ParseTree.ExprMul(expr1, expr2);
@@ -647,9 +652,9 @@ public class ParserImpl
 
         if((expr1 instanceof ParseTree.ExprBoolLit) && (operType.equals("+")) && (expr2 instanceof ParseTree.ExprBoolLit))
         {
-            throw new Exception("[Error at " + expr1.info.getLineno() + ":" + expr1.info.getColumn() + "] Binary operation " + oper.lexeme + " cannot be used with " + type1 + " and " + type2 + " values.");
+            throw new Exception("[Error at " + ((Token) s2).lineno + ":" + ((Token) s2).column + "] Binary operation " + oper.lexeme + " cannot be used with " + type1 + " and " + type2 + " values.");
         } else if ((expr1 instanceof ParseTree.ExprBoolLit) || (expr2 instanceof ParseTree.ExprBoolLit)) {
-            throw new Exception("[Error at " + expr1.info.getLineno() + ":" + expr1.info.getColumn() + "] Binary operation " + oper.lexeme + " cannot be used with " + type1 + " and " + type2 + " values.");
+            throw new Exception("[Error at " + ((Token) s2).lineno + ":" + ((Token) s2).column + "] Binary operation " + oper.lexeme + " cannot be used with " + type1 + " and " + type2 + " values.");
         }
 
         ParseTree.ExprDiv result = new ParseTree.ExprDiv(expr1, expr2);
@@ -680,9 +685,9 @@ public class ParserImpl
 
         if((expr1 instanceof ParseTree.ExprBoolLit) && (operType.equals("+")) && (expr2 instanceof ParseTree.ExprBoolLit))
         {
-            throw new Exception("[Error at " + expr1.info.getLineno() + ":" + expr1.info.getColumn() + "] Binary operation " + oper.lexeme + " cannot be used with " + type1 + " and " + type2 + " values.");
+            throw new Exception("[Error at " + ((Token) s2).lineno + ":" + ((Token) s2).column + "] Binary operation " + oper.lexeme + " cannot be used with " + type1 + " and " + type2 + " values.");
         } else if ((expr1 instanceof ParseTree.ExprBoolLit) || (expr2 instanceof ParseTree.ExprBoolLit)) {
-            throw new Exception("[Error at " + expr1.info.getLineno() + ":" + expr1.info.getColumn() + "] Binary operation " + oper.lexeme + " cannot be used with " + type1 + " and " + type2 + " values.");
+            throw new Exception("[Error at " + ((Token) s2).lineno + ":" + ((Token) s2).column + "] Binary operation " + oper.lexeme + " cannot be used with " + type1 + " and " + type2 + " values.");
         }
 
         ParseTree.ExprMod result = new ParseTree.ExprMod(expr1, expr2);
@@ -712,9 +717,9 @@ public class ParserImpl
 
         if((expr1 instanceof ParseTree.ExprBoolLit) && (operType.equals("+")) && (expr2 instanceof ParseTree.ExprBoolLit))
         {
-            throw new Exception("[Error at " + expr1.info.getLineno() + ":" + expr1.info.getColumn() + "] Binary operation " + oper.lexeme + " cannot be used with " + type1 + " and " + type2 + " values.");
+            throw new Exception("[Error at " + ((Token) s2).lineno + ":" + ((Token) s2).column + "] Binary operation " + oper.lexeme + " cannot be used with " + type1 + " and " + type2 + " values.");
         } else if ((expr1 instanceof ParseTree.ExprBoolLit) || (expr2 instanceof ParseTree.ExprBoolLit)) {
-            throw new Exception("[Error at " + expr1.info.getLineno() + ":" + expr1.info.getColumn() + "] Binary operation " + oper.lexeme + " cannot be used with " + type1 + " and " + type2 + " values.");
+            throw new Exception("[Error at " + ((Token) s2).lineno + ":" + ((Token) s2).column + "] Binary operation " + oper.lexeme + " cannot be used with " + type1 + " and " + type2 + " values.");
         }
 
         ParseTree.ExprEq result = new ParseTree.ExprEq(expr1, expr2);
@@ -745,9 +750,9 @@ public class ParserImpl
 
         if((expr1 instanceof ParseTree.ExprBoolLit) && (operType.equals("+")) && (expr2 instanceof ParseTree.ExprBoolLit))
         {
-            throw new Exception("[Error at " + expr1.info.getLineno() + ":" + expr1.info.getColumn() + "] Binary operation " + oper.lexeme + " cannot be used with " + type1 + " and " + type2 + " values.");
+            throw new Exception("[Error at " + ((Token) s2).lineno + ":" + ((Token) s2).column + "] Binary operation " + oper.lexeme + " cannot be used with " + type1 + " and " + type2 + " values.");
         } else if ((expr1 instanceof ParseTree.ExprBoolLit) || (expr2 instanceof ParseTree.ExprBoolLit)) {
-            throw new Exception("[Error at " + expr1.info.getLineno() + ":" + expr1.info.getColumn() + "] Binary operation " + oper.lexeme + " cannot be used with " + type1 + " and " + type2 + " values.");
+            throw new Exception("[Error at " + ((Token) s2).lineno + ":" + ((Token) s2).column + "] Binary operation " + oper.lexeme + " cannot be used with " + type1 + " and " + type2 + " values.");
         }
 
         ParseTree.ExprNe result = new ParseTree.ExprNe(expr1, expr2);
@@ -775,9 +780,9 @@ public class ParserImpl
 
         if((expr1 instanceof ParseTree.ExprBoolLit) && (operType.equals("+")) && (expr2 instanceof ParseTree.ExprBoolLit))
         {
-            throw new Exception("[Error at " + expr1.info.getLineno() + ":" + expr1.info.getColumn() + "] Binary operation " + oper.lexeme + " cannot be used with " + type1 + " and " + type2 + " values.");
+            throw new Exception("[Error at " + ((Token) s2).lineno + ":" + ((Token) s2).column + "] Binary operation " + oper.lexeme + " cannot be used with " + type1 + " and " + type2 + " values.");
         } else if ((expr1 instanceof ParseTree.ExprBoolLit) || (expr2 instanceof ParseTree.ExprBoolLit)) {
-            throw new Exception("[Error at " + expr1.info.getLineno() + ":" + expr1.info.getColumn() + "] Binary operation " + oper.lexeme + " cannot be used with " + type1 + " and " + type2 + " values.");
+            throw new Exception("[Error at " + ((Token) s2).lineno + ":" + ((Token) s2).column + "] Binary operation " + oper.lexeme + " cannot be used with " + type1 + " and " + type2 + " values.");
         }
 
         ParseTree.ExprLe result = new ParseTree.ExprLe(expr1, expr2);
@@ -805,9 +810,9 @@ public class ParserImpl
 
         if((expr1 instanceof ParseTree.ExprBoolLit) && (operType.equals("+")) && (expr2 instanceof ParseTree.ExprBoolLit))
         {
-            throw new Exception("[Error at " + expr1.info.getLineno() + ":" + expr1.info.getColumn() + "] Binary operation " + oper.lexeme + " cannot be used with " + type1 + " and " + type2 + " values.");
+            throw new Exception("[Error at " + ((Token) s2).lineno + ":" + ((Token) s2).column + "] Binary operation " + oper.lexeme + " cannot be used with " + type1 + " and " + type2 + " values.");
         } else if ((expr1 instanceof ParseTree.ExprBoolLit) || (expr2 instanceof ParseTree.ExprBoolLit)) {
-            throw new Exception("[Error at " + expr1.info.getLineno() + ":" + expr1.info.getColumn() + "] Binary operation " + oper.lexeme + " cannot be used with " + type1 + " and " + type2 + " values.");
+            throw new Exception("[Error at " + ((Token) s2).lineno + ":" + ((Token) s2).column + "] Binary operation " + oper.lexeme + " cannot be used with " + type1 + " and " + type2 + " values.");
         }
 
         ParseTree.ExprLt result = new ParseTree.ExprLt(expr1, expr2);
@@ -835,9 +840,9 @@ public class ParserImpl
 
         if((expr1 instanceof ParseTree.ExprBoolLit) && (operType.equals("+")) && (expr2 instanceof ParseTree.ExprBoolLit))
         {
-            throw new Exception("[Error at " + expr1.info.getLineno() + ":" + expr1.info.getColumn() + "] Binary operation " + oper.lexeme + " cannot be used with " + type1 + " and " + type2 + " values.");
+            throw new Exception("[Error at " + ((Token) s2).lineno + ":" + ((Token) s2).column + "] Binary operation " + oper.lexeme + " cannot be used with " + type1 + " and " + type2 + " values.");
         } else if ((expr1 instanceof ParseTree.ExprBoolLit) || (expr2 instanceof ParseTree.ExprBoolLit)) {
-            throw new Exception("[Error at " + expr1.info.getLineno() + ":" + expr1.info.getColumn() + "] Binary operation " + oper.lexeme + " cannot be used with " + type1 + " and " + type2 + " values.");
+            throw new Exception("[Error at " + ((Token) s2).lineno + ":" + ((Token) s2).column + "] Binary operation " + oper.lexeme + " cannot be used with " + type1 + " and " + type2 + " values.");
         }
 
         ParseTree.ExprGe result = new ParseTree.ExprGe(expr1, expr2);
@@ -874,9 +879,9 @@ public class ParserImpl
 
         if((expr1 instanceof ParseTree.ExprBoolLit) && (operType.equals("+")) && (expr2 instanceof ParseTree.ExprBoolLit))
         {
-            throw new Exception("[Error at " + expr1.info.getLineno() + ":" + expr1.info.getColumn() + "] Binary operation " + oper.lexeme + " cannot be used with " + type1 + " and " + type2 + " values.");
+            throw new Exception("[Error at " + ((Token) s2).lineno + ":" + ((Token) s2).column + "] Binary operation " + oper.lexeme + " cannot be used with " + type1 + " and " + type2 + " values.");
         } else if ((expr1 instanceof ParseTree.ExprBoolLit) || (expr2 instanceof ParseTree.ExprBoolLit)) {
-            throw new Exception("[Error at " + expr1.info.getLineno() + ":" + expr1.info.getColumn() + "] Binary operation " + oper.lexeme + " cannot be used with " + type1 + " and " + type2 + " values.");
+            throw new Exception("[Error at " + ((Token) s2).lineno + ":" + ((Token) s2).column + "] Binary operation " + oper.lexeme + " cannot be used with " + type1 + " and " + type2 + " values.");
         }
 
         ParseTree.ExprGt result = new ParseTree.ExprGt(expr1,expr2);
@@ -909,10 +914,10 @@ public class ParserImpl
 
         if((expr1 instanceof ParseTree.ExprNumLit) && (operType.equals("and")) && (expr2 instanceof ParseTree.ExprBoolLit))
         {
-            throw new Exception("[Error at " + expr1.info.getLineno() + ":" + expr1.info.getColumn() + "] Binary operation " + oper.lexeme + " cannot be used with " + type1 + " and " + type2 + " values.");
+            throw new Exception("[Error at " + ((Token) s2).lineno + ":" + ((Token) s2).column + "] Binary operation " + oper.lexeme + " cannot be used with " + type1 + " and " + type2 + " values.");
         } else if ((expr1 instanceof ParseTree.ExprBoolLit) && (operType.equals("and")) && (expr2 instanceof ParseTree.ExprNumLit))
         {
-            throw new Exception("[Error at " + expr1.info.getLineno() + ":" + expr1.info.getColumn() + "] Binary operation " + oper.lexeme + " cannot be used with " + type1 + " and " + type2 + " values.");
+            throw new Exception("[Error at " + ((Token) s2).lineno + ":" + ((Token) s2).column + "] Binary operation " + oper.lexeme + " cannot be used with " + type1 + " and " + type2 + " values.");
         }
 
         ParseTree.ExprAnd result = new ParseTree.ExprAnd(expr1, expr2);
@@ -940,10 +945,10 @@ public class ParserImpl
 
         if((expr1 instanceof ParseTree.ExprNumLit) && (OperType.equals("and")) && (expr2 instanceof ParseTree.ExprBoolLit))
         {
-            throw new Exception("[Error at " + expr1.info.getLineno() + ":" + expr1.info.getColumn() + "] Binary operation " + oper.lexeme + " cannot be used with " + type1 + " and " + type2 + " values.");
+            throw new Exception("[Error at " + ((Token) s2).lineno + ":" + ((Token) s2).column + "] Binary operation " + oper.lexeme + " cannot be used with " + type1 + " and " + type2 + " values.");
         } else if ((expr1 instanceof ParseTree.ExprBoolLit) && (OperType.equals("and")) && (expr2 instanceof ParseTree.ExprNumLit))
         {
-            throw new Exception("[Error at " + expr1.info.getLineno() + ":" + expr1.info.getColumn() + "] Binary operation " + oper.lexeme + " cannot be used with " + type1 + " and " + type2 + " values.");
+            throw new Exception("[Error at " + ((Token) s2).lineno + ":" + ((Token) s2).column + "] Binary operation " + oper.lexeme + " cannot be used with " + type1 + " and " + type2 + " values.");
         }
 
         ParseTree.ExprOr result = new ParseTree.ExprOr(expr1, expr2);
@@ -960,7 +965,7 @@ public class ParserImpl
         setTypeBasedOnVal(expr);
         if((OperType.equals("not")) && (expr instanceof ParseTree.ExprNumLit))
         {
-            throw new Exception("[Error at " + expr.info.getLineno() + ":" + expr.info.getColumn() + "] Unary operation " + oper.lexeme + " cannot be used with " + type + " value.");
+            throw new Exception("[Error at " + ((Token) s1).lineno + ":" + ((Token) s1).column + "] Unary operation " + oper.lexeme + " cannot be used with " + type + " value.");
         }
         ParseTree.ExprNot result = new ParseTree.ExprNot(expr);
         result.info.setType("bool");
@@ -981,9 +986,9 @@ public class ParserImpl
 
         Object type = env.Get(id.lexeme);
         System.out.println("TYPE IN EXPR____IDENT: " + type);
-        /*if (type == null) {
-            throw new Exception("Identifier '" + id.lexeme + "' not defined.");
-        }*/
+        if (type == null) {
+            throw new Exception("[Error at " + id.lineno + ":" + id.column + "] Variable " + id.lexeme + " is not defined.");
+        }
 
         result.info.setType(type.toString());
 
@@ -997,6 +1002,8 @@ public class ParserImpl
         ParseTree.ExprNumLit result = new ParseTree.ExprNumLit(value);
         result.info.setType("num");
         result.info.setValue(num.lexeme);
+        result.info.setColumn(num.column);
+        result.info.setLineno(num.lineno);
         return result;
     }
     Object expr____BOOLLIT(Object s1) throws Exception
@@ -1004,10 +1011,10 @@ public class ParserImpl
         Token token = (Token)s1; // Token containing boolean literal
         boolean value = Boolean.parseBoolean(token.lexeme);
         ParseTree.ExprBoolLit expr = new ParseTree.ExprBoolLit(value);
-        expr.info.setColumn(token.column);
-        expr.info.setLineno(token.lineno);
         expr.info.setType("bool");
         expr.info.setValue(token.lexeme);
+        expr.info.setColumn(token.column);
+        expr.info.setLineno(token.lineno);
         return expr;
     }
     Object expr____IDENT_LPAREN_args_RPAREN(Object s1, Object s2, Object s3, Object s4) throws Exception
@@ -1028,11 +1035,11 @@ public class ParserImpl
         //ParseTreeInfo.FuncDeclInfo funcInfo = (ParseTreeInfo.FuncDeclInfo) env.Get(id.lexeme);
 
         if (!id.lexeme.equals(funcDefined)) {
-            throw new Exception("[Error at :] Function " + id.lexeme + "() is not declared.");
+            throw new Exception("[Error at " + ((Token) s1).lineno + ":" + ((Token) s1).column + "] Function " + id.lexeme + "() is not defined.");
         }
 
         if (args.size() != expectedParams) {
-            throw new Exception("[Error at :] Function " + id.lexeme + "() should be called with the correct number of arguments.");
+            throw new Exception("[Error at " + ((Token) s1).lineno + ":" + ((Token) s1).column + "] Function " + id.lexeme + "() should be called with the correct number of arguments.");
         }
 
         for (int i = 0; i < args.size(); i++) {
@@ -1041,7 +1048,7 @@ public class ParserImpl
             System.out.println("ARGGGGGGGGGG: " + actualArg.expr.info.getType());
             System.out.println("ARGGGGGGGGGG2: " + env.Get("param"+i));
             if (!actualArg.expr.info.getType().equals(expectedArg)) {
-                throw new Exception("[Error at :] The " + (i+1) + ordinalSuffix(i + 1) + " argument of function " + funcDefined + "() should be a " + expectedArg + " value, instead of a " + actualArg.expr.info.getType() + " value.");
+                throw new Exception("[Error at " + ((Token) s1).lineno + ":" + ((Token) s1).column + "] The " + (i+1) + ordinalSuffix(i + 1) + " argument of function " + funcDefined + "() should be a " + expectedArg + " value, instead of a " + actualArg.expr.info.getType() + " value.");
             }
         }
 
@@ -1061,13 +1068,14 @@ public class ParserImpl
         }
         if(value.equals("bool"))
         {
-            throw new Exception("[Error at " + expr.info.getLineno() + ":" + expr.info.getColumn() + "] Array size must be a num value.");
+            throw new Exception("[Error at " + ((Token) s2).column + ":" + ((Token) s2).lineno + "] Array size must be a num value.");
         }
         ParseTree.ExprNewArray result = new ParseTree.ExprNewArray(primtype, expr);
         return result;
     }
     Object expr____IDENT_LBRACKET_expr_RBRACKET(Object s1, Object s2, Object s3, Object s4) throws Exception {
         Token id = (Token)s1;
+        Token LBRACKET = (Token) s2;
         ParseTree.Expr indexExpr = (ParseTree.Expr)s3;
 
         setTypeBasedOnVal(indexExpr);
@@ -1077,11 +1085,11 @@ public class ParserImpl
         System.out.println("IDENT EXPR FULLTYPE: " + fullType + " ______________");
 
         if (!fullType.toString().endsWith("[]")) {
-            throw new Exception("[Error at " + indexExpr.info.getLineno() + ":" + indexExpr.info.getColumn() + "] Identifier " + id.lexeme + " should be array variable.");
+            throw new Exception("[Error at " + id.lineno + ":" + (LBRACKET.column+1) + "] Identifier " + id.lexeme + " should be array variable.");
         }
 
         if (!indexType.equals("num")) {
-            throw new Exception("[Error at " + indexExpr.info.getLineno() + ":" + indexExpr.info.getColumn() + "] Array index must be num value.");
+            throw new Exception("[Error at " + id.lineno + ":" + (LBRACKET.column+1) + "] Array index must be num value.");
         }
 
         ParseTree.ExprArrayElem result = new ParseTree.ExprArrayElem(id.lexeme, indexExpr);
