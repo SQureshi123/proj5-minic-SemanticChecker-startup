@@ -21,15 +21,12 @@ public class ParserImpl
     public void enterBlock() {
         Env newEnv = new Env(env);
         env = newEnv;
-        System.out.println("Entered new block ---------------------------------------------------------------------------");
     }
 
     public void exitBlock() {
         if (env.prev != null) {
             env = env.prev;
-            System.out.println("Exited previous block");
         } else {
-            System.out.println("No previous block");
         }
     }
 
@@ -56,16 +53,13 @@ public class ParserImpl
     private void setTypeBasedOnVal(ParseTree.Expr expr) {
         if (expr instanceof ParseTree.ExprIdent) {
             ParseTree.ExprIdent exprIdent = (ParseTree.ExprIdent) expr;
-            System.out.println("function used for " + exprIdent.ident);
 
             Object value = env.Get(exprIdent.ident);
-            System.out.println("Expr: " + exprIdent.ident + " Value: " + value.toString());
 
             try {
                 Double.parseDouble(value.toString());
                 expr.info.setValue(env.Get(exprIdent.ident).toString());
                 expr.info.setType("num");
-                System.out.println("set to num with value: " + value);
                 if (value.toString().equals("num")) {
                     expr.info.setType("num");
                 }
@@ -74,10 +68,8 @@ public class ParserImpl
                 boolean boolValue = Boolean.parseBoolean(value.toString());
                 if (value.toString().equals("true") || value.toString().equals("false")) {
                     expr.info.setValue(env.Get(exprIdent.ident).toString());
-                    System.out.println("set to bool with value: " + value);
                     expr.info.setType("bool");
                 } else {
-                    System.out.println("Val is not num or bool: " + value);
                     expr.info.setType("function");
                 }
             }
@@ -124,14 +116,12 @@ public class ParserImpl
     Object typespec____primtype(Object s1)
     {
         ParseTree.TypeSpec primtype = (ParseTree.TypeSpec)s1;
-        System.out.println("PrimType: " + primtype.typename);
         return primtype;
     }
     Object typespec____primtype_LBRACKET_RBRACKET(Object s1, Object s2, Object s3) //NOT DONE
     {
         ParseTree.TypeSpec primtype = (ParseTree.TypeSpec)s1;
         ParseTree.TypeSpec arrayType = new ParseTree.TypeSpec(primtype.typename + "[]");
-        System.out.println("ArrayType: " + arrayType.typename);
         return arrayType;
     }
 
@@ -144,8 +134,6 @@ public class ParserImpl
         // 3. add parameters into top-local scope of env
         // 4. etc.
         // 5. create and return funcdecl node
-
-        System.out.println("FUNDECL STATEMENT");
 
         Token                           id = (Token) s2;
         ParseTree.TypeSpec              returnType = (ParseTree.TypeSpec) s4;
@@ -164,20 +152,11 @@ public class ParserImpl
 
         for (ParseTree.Param param : params) {
             env.Put(param.ident, param.typespec.typename);
-            System.out.println("Added parameter " + param.ident + " to env with type " + param.typespec.typename + "@@@@@@@@@@@@@@");
             env.Put(param.ident+"paramType", param.typespec.typename);
             env.Put("param" + paramsSize, param.typespec.typename);
             paramsSize++;
-            System.out.println("PARAMS_SIZE: " + paramsSize + " -=-=-=-=-=-=-=-=--=-");
         }
 
-        System.out.println("PARAMS_SIZE: " + paramsSize + " -=-=-=-=-=-=-=-=--=-");
-
-        /*if (!(paramsSize == 0)) {
-            env.Put("expectedParamsSize", paramsSize);
-        } else {
-            env.Put("expectedParamsSize", 0);
-        }*/
 
         Env newEnv = new Env(env);
         env = newEnv;
@@ -197,7 +176,6 @@ public class ParserImpl
     }
     Object fundecl____FUNC_IDENT_TYPEOF_typespec_LPAREN_params_RPAREN_BEGIN_localdecls_X10_stmtlist_END(Object s1, Object s2, Object s3, Object s4, Object s5, Object s6, Object s7, Object s8, Object s9, Object s10, Object s11, Object s12) throws Exception
     {
-        System.out.println("FUNDECL2 STATEMENT");
         // 1. check if this function has at least one return type
         // 2. etc.
         // 3. create and return funcdecl node
@@ -230,7 +208,6 @@ public class ParserImpl
         ArrayList<ParseTree.Param> paramlist = (ArrayList<ParseTree.Param>)s1;
         ParseTree.Param            param     = (ParseTree.Param           )s3;
         paramlist.add(param);
-        System.out.println("PARAMLIST COMMA PARAM: " + env.Get(param.ident).toString() + "_________________________");
         param.info.setType(env.Get(param.ident).toString());
         return paramlist;
     }
@@ -247,7 +224,6 @@ public class ParserImpl
         Token id = (Token) s1;
         ParseTree.TypeSpec typespec = (ParseTree.TypeSpec)s3;
         ParseTree.Param param = new ParseTree.Param(id.lexeme, typespec);
-        System.out.println("PARAM TYPEOF: " + id.lexeme + " " + typespec.typename);
         env.Put(id.lexeme, typespec.typename);
         typespec.info.setType(id.lexeme);
         param.reladdr = 1;
@@ -348,6 +324,7 @@ public class ParserImpl
 
     Object assignstmt____IDENT_LBRACKET_expr_RBRACKET_ASSIGN_expr_SEMI(Object s1, Object s2, Object s3, Object s4, Object s5, Object s6, Object s7) throws Exception {
         Token id = (Token)s1; // the identifier for the array
+        Token LBRACKET = (Token)s2;
         ParseTree.Expr indexExpr = (ParseTree.Expr)s3; // the index expression
         ParseTree.Expr valueExpr = (ParseTree.Expr)s6; // the expression to assign
 
@@ -365,8 +342,6 @@ public class ParserImpl
         if (!valueExpr.info.getType().equals(baseType)) {
             throw new Exception("[Error at " + ((Token) s1).lineno + ":" + ((Token) s1).column + "] Element of array " + id.lexeme + " should have " + baseType + " value, instead of " + valueExpr.info.getType() + " value.");
         }
-
-        System.out.println("Index Expr: " + indexExpr);
 
         if (!indexExpr.info.getType().equals("num")) {
             throw new Exception("[Error at " + ((Token) s1).lineno + ":" + ((Token) s1).column + "] Array index must be num value.");
@@ -389,10 +364,6 @@ public class ParserImpl
         String functionName = (String) env.Get("function");
 
         Object vars = env.Get(expr.info.getType());
-        System.out.println("Vars: " + vars);
-
-        System.out.println("Expr Type: " + exprType);
-        System.out.println("Expected Expr Type: " + expectedReturnType);
 
         if (exprType.isEmpty() && !expectedReturnType.isEmpty()) {
             throw new Exception("[Error at " + expr.info.getLineno() + ":" + expr.info.getColumn() + "] Function " + functionName + "() should return at least one value.");
@@ -443,7 +414,6 @@ public class ParserImpl
         }
 
         typespec.info.setType(id.lexeme);
-        System.out.println("PUTTING INTO ENV TABLE WITH TYPENAME FOR: " + id.lexeme + " WITH TYPE: " + typespec.typename);
         env.Put(id.lexeme, typespec.typename);
 
         return localdecl;
@@ -475,9 +445,6 @@ public class ParserImpl
     Object while_stmt____WHILE_expr_BEGIN_stmt_list_END(Object s1, Object s2, Object s3, Object s4, Object s5) throws Exception {
         ParseTree.Expr expr = (ParseTree.Expr) s2;
         ArrayList<ParseTree.Stmt> stmtList = (ArrayList<ParseTree.Stmt>) s4;
-
-        System.out.println("Evaluating expression: " + expr.toString());
-        System.out.println("Expression type: " + expr.info.getType());
 
         setTypeBasedOnVal(expr);
 
@@ -863,8 +830,6 @@ public class ParserImpl
 
         Object value = env.Get(exprIdent.ident);
 
-        System.out.println("VALUE: " + value);
-
         setTypeBasedOnVal(expr1);
         setTypeBasedOnVal(expr2);
 
@@ -873,9 +838,6 @@ public class ParserImpl
 
         String type1 = expr1.info.getType();
         String type2 = expr2.info.getType();
-
-        System.out.println(expr1.info.getType());
-        System.out.println(expr1.info.getType());
 
         if((expr1 instanceof ParseTree.ExprBoolLit) && (operType.equals("+")) && (expr2 instanceof ParseTree.ExprBoolLit))
         {
@@ -899,9 +861,6 @@ public class ParserImpl
         Token          oper  = (Token         )s2;
         ParseTree.Expr expr2 = (ParseTree.Expr)s3;
         // check if expr1.type matches with expr2.type
-
-        System.out.println("Type of expr1: " + expr1.info.getType());
-        System.out.println("Type of expr2: " + expr2.info.getType());
 
         setTypeBasedOnVal(expr1);
         setTypeBasedOnVal(expr2);
@@ -985,9 +944,17 @@ public class ParserImpl
         result.reladdr = 1;
 
         Object type = env.Get(id.lexeme);
-        System.out.println("TYPE IN EXPR____IDENT: " + type);
         if (type == null) {
             throw new Exception("[Error at " + id.lineno + ":" + id.column + "] Variable " + id.lexeme + " is not defined.");
+        }
+
+        Object typeArray = env.Get(id.lexeme+"func");
+
+        if (typeArray == null) {
+            typeArray = "placeholder";
+        }
+        if (!type.equals(typeArray) && !typeArray.equals("placeholder")) {
+            throw new Exception("[Error at " + id.lineno + ":" + id.column + "] Identifier " + type + " should be non-function type.");
         }
 
         result.info.setType(type.toString());
@@ -1023,16 +990,15 @@ public class ParserImpl
         ArrayList<ParseTree.Arg> args = (ArrayList<ParseTree.Arg>)s3;
 
         Integer expectedParams = (Integer) env.Get(id.lexeme + "expectedParamsSize");
-        //Object expectedParamType = env.Get(args + "paramType");
-        //System.out.println("EXPECTED PARAM TYPE: " + expectedParamType + "///////////////////////////");
         if (expectedParams == null) {
             expectedParams = 0;
         }
         Object funcDefined = env.Get(id.lexeme);
-        System.out.println("ID.LEXEME IDENT LPAREN: " + id.lexeme);
-        System.out.println("FUNC DEFINED: " + funcDefined + "+++++++++++++++++++++++++");
-        System.out.println("EXPECTED PARAMS SIZE DEFINED: " + expectedParams + "+++++++++++++++++++++++++----");
         //ParseTreeInfo.FuncDeclInfo funcInfo = (ParseTreeInfo.FuncDeclInfo) env.Get(id.lexeme);
+
+        /*if (funcDefined == null) {
+            throw new Exception("should be function.");
+        }*/
 
         if (!id.lexeme.equals(funcDefined)) {
             throw new Exception("[Error at " + ((Token) s1).lineno + ":" + ((Token) s1).column + "] Function " + id.lexeme + "() is not defined.");
@@ -1045,8 +1011,6 @@ public class ParserImpl
         for (int i = 0; i < args.size(); i++) {
             ParseTree.Arg actualArg = args.get(i);
             Object expectedArg = env.Get("param"+i);
-            System.out.println("ARGGGGGGGGGG: " + actualArg.expr.info.getType());
-            System.out.println("ARGGGGGGGGGG2: " + env.Get("param"+i));
             if (!actualArg.expr.info.getType().equals(expectedArg)) {
                 throw new Exception("[Error at " + ((Token) s1).lineno + ":" + ((Token) s1).column + "] The " + (i+1) + ordinalSuffix(i + 1) + " argument of function " + funcDefined + "() should be a " + expectedArg + " value, instead of a " + actualArg.expr.info.getType() + " value.");
             }
@@ -1061,7 +1025,6 @@ public class ParserImpl
         ParseTree.TypeSpec primtype = (ParseTree.TypeSpec)s2;
         ParseTree.Expr expr = (ParseTree.Expr)s4;
         Object value = expr.info.getType();
-        System.out.println("value: " + expr.info.getType());
         if(value.equals("true") || value.equals("false"))
         {
             value = "bool";
@@ -1080,9 +1043,7 @@ public class ParserImpl
 
         setTypeBasedOnVal(indexExpr);
         String indexType = indexExpr.info.getType();
-        System.out.println("Type of index: " + indexType);
         Object fullType = env.Get(id.lexeme);
-        System.out.println("IDENT EXPR FULLTYPE: " + fullType + " ______________");
 
         if (!fullType.toString().endsWith("[]")) {
             throw new Exception("[Error at " + id.lineno + ":" + (LBRACKET.column+1) + "] Identifier " + id.lexeme + " should be array variable.");

@@ -6,7 +6,7 @@ public class Compiler {
     }
     public void Parse()
     {
-        ParserImpl._debug = true;
+        ParserImpl._debug = false;
 
         try {
             if (parser.yyparse() == 0)
